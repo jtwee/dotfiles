@@ -1,0 +1,368 @@
+#######################################
+# Cleanup default aliases I don't want
+#######################################
+unalias l
+unalias ls
+unalias lsa
+
+
+#######################################
+# Global aliases
+#######################################
+
+# Act safely when modifying files
+alias -g cp='cp -i'
+alias -g mv='mv -i'
+alias -g rm='rm -i'
+
+
+#######################################
+# Regular Aliases
+#######################################
+
+# Detect which `ls` flavor is in use
+if ls --color >/dev/null 2>&1; then # GNU `ls`
+  colorflag="--color"
+  export CLICOLOR=1
+  export LS_COLORS='di=36:ln=1;31:so=37:pi=1;33:ex=35:bd=37:cd=37:su=37:sg=37:tw=32:ow=32:'
+else # macOS `ls`
+  colorflag="-G"
+  export CLICOLOR=1
+  export LSCOLORS='gxBxhxDxfxhxhxhxhxcxcx'
+fi
+
+# List all files colorized in long format
+alias ll="ls -lF ${colorflag}"
+
+# List all files colorized including dot files, excluding . and ..
+alias la="ls -AF ${colorflag}"
+
+# List all files colorized including dot files in long format, excluding . and ..
+alias lal="ls -lAF ${colorflag}"
+
+# Always use color output and no quoting for `ls`
+alias ls="command ls ${colorflag}"
+
+# Add an extended regex version of find (like egrep)
+alias efind='find -E'
+
+# Extra names and functions
+alias edit="code -a"
+
+# Common shortcuts
+alias edithosts="code -a /etc/hosts"
+alias editprof="code -a ~/.zshrc"
+alias fdirs='find . -type d'
+alias fdotdash="find . -name '._*'"
+alias fdsstore="find . -name '.DS_Store'"
+alias ffiles='find . -type f'
+
+# Show/hide hidden files in Finder
+alias showhidden="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidehidden="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Recursively delete `.DS_Store` files
+alias cleanup="find . -type f \( -name '.DS_Store' -o -name '._*' \) -ls -delete"
+
+# Enable aliases to be sudo'ed
+alias sudo='sudo '
+
+# Enable bash for sudo shell
+alias lvlup='sudo -s'
+
+# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g'
+
+# Print each PATH entry on a separate line
+alias path='echo -e ${PATH//:/\\n}'
+
+# IP info
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="networksetup -listallnetworkservices | grep -v '\*' | xargs -I{} networksetup -getinfo "{}" | tr '[:upper:]' '[:lower:]' | grep -E '^ip address: \d' | sed 's/ip address: //'"
+
+# Set permisions to
+alias modownf='find . -type f -print0 | xargs -0 -I{} chmod 644 {}'
+alias modownd='find . -type d -print0 | xargs -0 -I{} chmod 755 {}'
+alias modgrpf='find . -type f -print0 | xargs -0 -I{} chmod 664 {}'
+alias modgrpd='find . -type d -print0 | xargs -0 -I{} chmod 775 {}'
+#alias modallf='find . -type f -print0 | xargs -0 -I{} chmod 666 {}'
+#alias modalld='find . -type d -print0 | xargs -0 -I{} chmod 777 {}'
+
+# Extra git aliases
+alias 'ga.'='git add .'
+alias gs='git status -s'
+alias gfap='git fetch --all && git pull --prune'
+alias gnb='git checkout -b'
+alias grd='git diff origin/$(git_current_branch)..$(git_current_branch)'
+alias gbm='git branch -m'
+alias gbM='git branch -M'
+alias gcubs='git branch --merged $(git_current_branch) --no-contains $(git_current_branch) | grep -vE "^\\s*(main|staging)\\s*\$" | xargs -pL1 git branch -d'
+alias gfom='git fetch origin main:main'
+alias glpr='git log --pretty=reference --date=local'
+alias gcfxo='git commit --fixup=origin/$(git_current_branch)'
+alias ggc='git gc'
+alias gbrl='git branch --list --ignore-case'
+alias gdtd='git difftool -d'
+# alias gpnb='gpsup'
+
+
+#######################################
+# Conditional aliases
+#######################################
+
+# Use bat in place of cat by default
+if [[ -x $(which bat) ]]; then
+  alias cat=bat
+fi
+
+# If ghead is installed, add an alias to trim new lines and copy to clipboard
+if [[ -x $(which ghead) ]]; then
+  alias cb="ghead -c -1 | pbcopy"
+fi
+
+# If gfind is installed, add a default fancy find alias
+if [[ -x $(which gfind) ]]; then
+  alias f="gfind ! -path '*/.git/*' ! -path '*/vendor/*' ! -path '*/node_modules/*'"
+fi
+
+# If nvm is installed
+if [[ -x $(which nvm) ]]; then
+  alias nvmup='nvm install `nvm version-remote --lts` --lts'
+  alias nvmuplatest='nvm install `nvm version-remote`'
+fi
+
+
+#######################################
+# Function aliases
+#######################################
+
+function update-latest-node {
+  if [[ ! -z ${NVM_DIR+x} ]] && \
+    [[ -n "$(type -t nvm)" ]] && [[ "$(type -t nvm)" == "function" ]] && \
+    [[ -n "$(type -t nvm_version_path)" ]] && [[ "$(type -t nvm_version_path)" == "function" ]]
+  then
+    if [[ -L "$NVM_DIR/latest" ]]; then
+      rm -f "$NVM_DIR/latest"
+    fi
+
+    ln -s $(nvm_version_path $(nvm version latest)) "$NVM_DIR/latest"
+
+    echo "Created link from $(nvm_version_path $(nvm version latest)) to $NVM_DIR/latest"
+  fi
+}
+
+function update-default-node {
+  if [[ ! -z ${NVM_DIR+x} ]] && \
+    [[ -n "$(type -t nvm)" ]] && [[ "$(type -t nvm)" == "function" ]] && \
+    [[ -n "$(type -t nvm_version_path)" ]] && [[ "$(type -t nvm_version_path)" == "function" ]]
+  then
+    if [[ -L "$NVM_DIR/default" ]]; then
+      rm -f "$NVM_DIR/default"
+    fi
+
+    ln -s $(nvm_version_path $(nvm version default)) "$NVM_DIR/default"
+
+    echo "Created link from $(nvm_version_path $(nvm version default)) to $NVM_DIR/default"
+  fi
+}
+
+function cleanupusb {
+  if [[ ! -z $(diskutil info $(pwd) | grep -E 'Device Location:\s+External') ]]; then
+    find . -name '._*' -delete
+    find . -name '.DS_Store' -delete
+    rm -rf .Spotlight-V100 .Trashes .fseventsd
+  else
+    echo "This command can only be run from an external drive"
+  fi
+}
+
+# Backup a file or folder
+function bak {
+  while (($#)); do
+    if [[ -r $1 && -w $(dirname $1) ]]; then
+      if [[ -d $1 ]]; then
+        cp -Rfp "$1" "$1.bak"
+      else
+        cp -i "$1" "$1.bak"
+      fi
+    fi
+    shift
+  done
+}
+
+# Unbackup a file or folder
+function unbak {
+  while (($#)); do
+    if [[ -d "$1.bak" || -f "$1.bak" ]]; then
+      mv -f "$1.bak" "$1"
+    fi
+    shift
+  done
+}
+
+# Backup a file of folder with date/time string in filename and exisiting extension
+function bakdate {
+  curDateTime=$(date +%Y%m%d-%H%M%S)
+  while (($#)); do
+    if [[ -d $1 ]]; then
+      cp -Rfp "$1" "$1-$curDateTime"
+    else
+      fullname=$(basename $1)
+      if [[ $fullname == *.* ]]; then
+        dirname=$(dirname $1)
+        filename="${fullname%%.*}"
+        extension="${fullname#*.}"
+        newName="$dirname/$filename-$curDateTime.$extension"
+      else
+        newName="$1-$curDateTime"
+      fi
+      cp -i "$1" "$newName"
+    fi
+    shift
+  done
+}
+
+# Temporarily serve a directory
+function serveme {
+  portnum=8888
+  while [[ -n $(lsof -ti :$portnum) ]] && [[ $portnum -lt 9000 ]]; do
+    let portnum++
+  done
+
+  if [[ $portnum -lt 9000 ]]; then
+    open "http://localhost:$portnum/"
+    php -d display_errors=0 -d log_errors=1 -d error_reporting=32767 -S localhost:$portnum
+  fi
+}
+
+# Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
+function targz {
+  local tmpFile="${@%/}.tar";
+  tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
+
+  size=$(
+    stat -f"%z" "${tmpFile}" 2> /dev/null; # macOS `stat`
+    stat -c"%s" "${tmpFile}" 2> /dev/null;  # GNU `stat`
+  );
+
+  local cmd="";
+  if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
+    # the .tar file is smaller than 50 MB and Zopfli is available; use it
+    cmd="zopfli";
+  else
+    if hash pigz 2> /dev/null; then
+      cmd="pigz";
+    else
+      cmd="gzip";
+    fi;
+  fi;
+
+  echo "Compressing .tar ($((size / 1000)) kB) using \`${cmd}\`...";
+  "${cmd}" -v "${tmpFile}" || return 1;
+  [ -f "${tmpFile}" ] && rm "${tmpFile}";
+
+  zippedSize=$(
+    stat -f"%z" "${tmpFile}.gz" 2> /dev/null; # macOS `stat`
+    stat -c"%s" "${tmpFile}.gz" 2> /dev/null; # GNU `stat`
+  );
+
+  echo "${tmpFile}.gz ($((zippedSize / 1000)) kB) created successfully.";
+}
+
+# Determine size of a file or total size of a directory
+function fs {
+  if du -b /dev/null > /dev/null 2>&1; then
+    local arg=-sbh;
+  else
+    local arg=-sh;
+  fi
+  if [[ -n "$@" ]]; then
+    du $arg -- "$@";
+  else
+    du $arg .[^.]* ./*;
+  fi;
+}
+
+# Create a data URL from a file
+function dataurl {
+  local mimeType=$(file -b --mime-type "$1");
+  if [[ $mimeType == text/* ]]; then
+    mimeType="${mimeType};charset=utf-8";
+  fi
+  echo "data:${mimeType};base64,$(openssl base64 -in "$1" | tr -d '\n')";
+}
+
+# Run `dig * A` and display the most useful info
+function diga {
+  dig +nocmd -q "$1" -t A +multiline +noall +answer;
+}
+
+# Run `dig * any` and display the most useful info
+function digany {
+  dig +nocmd -q "$1" -t ANY +multiline +noall +answer;
+}
+
+# Normalize `open` across Linux, macOS, and Windows.
+# This is needed to make the `o` function (see below) cross-platform.
+if [ ! $(uname -s) = 'Darwin' ]; then
+  if grep -q Microsoft /proc/version; then
+    # Ubuntu on Windows using the Linux subsystem
+    alias open='explorer.exe';
+  else
+    alias open='xdg-open';
+  fi
+fi
+
+function openWith {
+  if [[ $# > 0 ]]; then
+    case "$1" in
+      c)
+        opener='code'
+        shift
+        ;;
+      v)
+        opener='vim'
+        shift
+        ;;
+      o)
+        opener='open'
+        shift
+        ;;
+    esac
+  fi
+
+  opener="${opener:-open}"
+
+  if [[ $# == 0 ]]; then
+    $opener .;
+  else
+    $opener "$@";
+  fi
+}
+
+# `c` with no arguments opens the current directory in vscode, otherwise opens the given location
+function c {
+  openWith $0 "$@"
+}
+
+# `v` with no arguments opens the current directory in Vim, otherwise opens the given location
+function v {
+  openWith $0 "$@"
+}
+
+# `o` with no arguments opens the current directory, otherwise opens the given location
+function o {
+  openWith $0 "$@"
+}
+
+# `treee` is a shorthand for `tree` with hidden files and color enabled, ignoring
+# the `.git` directory, listing directories first. The output gets piped into
+# `less` with options to preserve color and line numbers, unless the output is
+# small enough for one screen.
+function treee {
+  tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
+}
