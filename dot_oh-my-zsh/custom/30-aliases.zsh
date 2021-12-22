@@ -116,7 +116,7 @@ alias gdtd='git difftool -d'
 
 # Use bat in place of cat by default
 if [[ -x $(which bat) ]]; then
-  alias cat=bat
+  alias -g cat=bat
 fi
 
 # If ghead is installed, add an alias to trim new lines and copy to clipboard
@@ -129,46 +129,10 @@ if [[ -x $(which gfind) ]]; then
   alias f="gfind ! -path '*/.git/*' ! -path '*/vendor/*' ! -path '*/node_modules/*'"
 fi
 
-# If nvm is installed
-if [[ -x $(which nvm) ]]; then
-  alias nvmup='nvm install `nvm version-remote --lts` --lts'
-  alias nvmuplatest='nvm install `nvm version-remote`'
-fi
-
 
 #######################################
 # Function aliases
 #######################################
-
-function update-latest-node {
-  if [[ ! -z ${NVM_DIR+x} ]] && \
-    [[ -n "$(type -t nvm)" ]] && [[ "$(type -t nvm)" == "function" ]] && \
-    [[ -n "$(type -t nvm_version_path)" ]] && [[ "$(type -t nvm_version_path)" == "function" ]]
-  then
-    if [[ -L "$NVM_DIR/latest" ]]; then
-      rm -f "$NVM_DIR/latest"
-    fi
-
-    ln -s $(nvm_version_path $(nvm version latest)) "$NVM_DIR/latest"
-
-    echo "Created link from $(nvm_version_path $(nvm version latest)) to $NVM_DIR/latest"
-  fi
-}
-
-function update-default-node {
-  if [[ ! -z ${NVM_DIR+x} ]] && \
-    [[ -n "$(type -t nvm)" ]] && [[ "$(type -t nvm)" == "function" ]] && \
-    [[ -n "$(type -t nvm_version_path)" ]] && [[ "$(type -t nvm_version_path)" == "function" ]]
-  then
-    if [[ -L "$NVM_DIR/default" ]]; then
-      rm -f "$NVM_DIR/default"
-    fi
-
-    ln -s $(nvm_version_path $(nvm version default)) "$NVM_DIR/default"
-
-    echo "Created link from $(nvm_version_path $(nvm version default)) to $NVM_DIR/default"
-  fi
-}
 
 function cleanupusb {
   if [[ ! -z $(diskutil info $(pwd) | grep -E 'Device Location:\s+External') ]]; then
