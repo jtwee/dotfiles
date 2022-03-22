@@ -4,12 +4,20 @@ if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then source ~/.nix-profile/etc/pr
 
 # Shopify dev aliases
 alias d='dev'
+alias ds='dev server'
+alias da='dev all'
 alias dup='dev up'
 alias dups='dev up && dev server'
+alias dupa='dev up && dev all'
 alias ddup='dev down && dev up'
 alias ddups='dev down && dev up && dev server'
-alias dct='TZ=UTC dev client-test'
-alias dwc='TZ=UTC dev web-checks'
+alias ddupa='dev down && dev up && dev all'
+alias dct='TZ=GMT dev client-test'
+alias dwc='TZ=GMT dev web-checks'
 alias ddupup='dev down && dev update && dev up'
 alias dcd='dev cd'
-alias dsa='dev stop-all'
+alias ddown='dev down'
+
+alias fbs='dev cd fbs'
+alias 'sfn-webhooks'='dev cd sfn-webhooks'
+alias warehouse='dev cd warehouse'

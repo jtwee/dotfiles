@@ -1,0 +1,9 @@
+{{- if ne .chezmoi.os "darwin" }}
+.Brewfile
+.config/karabiner
+.duti
+.finicky.js
+.hushlogin
+.init_darwin.sh
+.oh-my-zsh/custom/50-shopify.zsh
+{{- end }}

@@ -5,19 +5,19 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
+if [[ $CPUTYPE == 'arm64' ]]; then
+	export BREW_PREFIX='/opt/homebrew'
+else
+	export BREW_PREFIX='/usr/local'
+fi
+
 BREW_PATH=${BREW_PATH:-'/usr/local'}
 
 # If you come from bash you might have to change your $PATH.
-export PATH="$BREW_PATH/bin:$PATH:$HOME/.composer/vendor/bin:$HOME/bin";
+export PATH="/usr/local/bin:$PATH:$BREW_PREFIX/opt/python/libexec/bin:$HOME/.composer/vendor/bin:$HOME/bin";
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/jeremytweddle/.oh-my-zsh"
-
-if [[ $CPUTYPE == 'arm64' ]]; then
-  export BREW_PREFIX='/opt/homebrew'
-else
-  export BREW_PREFIX='/usr/local'
-fi
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
@@ -90,7 +90,11 @@ fi
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-prompt vscode yarn)
+plugins=(git git-prompt vscode yarn zsh-git-scripts)
+
+if type brew &>/dev/null; then
+  export fpath=(${BREW_PREFIX}/share/zsh/site-functions $fpath)
+fi
 
 source $ZSH/oh-my-zsh.sh
 
@@ -120,6 +124,8 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+export HOMEBREW_NO_ENV_HINTS=true
+
 source ${BREW_PREFIX}/opt/powerlevel10k/powerlevel10k.zsh-theme
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -132,3 +138,5 @@ source ${BREW_PREFIX}/opt/powerlevel10k/powerlevel10k.zsh-theme
 [[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
 
 [ -f /opt/dev/dev.sh ] && source /opt/dev/dev.sh
+
+[[ -x /opt/homebrew/bin/brew ]] && eval $(/opt/homebrew/bin/brew shellenv)

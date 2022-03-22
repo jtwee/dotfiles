@@ -11,9 +11,9 @@ unalias lsa
 #######################################
 
 # Act safely when modifying files
-alias -g cp='cp -i'
-alias -g mv='mv -i'
-alias -g rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
 
 
 #######################################
@@ -107,6 +107,7 @@ alias gcfxo='git commit --fixup=origin/$(git_current_branch)'
 alias ggc='git gc'
 alias gbrl='git branch --list --ignore-case'
 alias gdtd='git difftool -d'
+alias 'gco-'='git checkout -'
 # alias gpnb='gpsup'
 
 

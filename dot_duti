@@ -30,6 +30,7 @@ com.microsoft.VSCode  .sass        all
 com.microsoft.VSCode  .scss        all
 com.microsoft.VSCode  .sh          all
 com.microsoft.VSCode  .ts          all
+com.microsoft.VSCode  .tsx         all
 com.microsoft.VSCode  .txt         all
 com.microsoft.VSCode  .xml         all
 com.microsoft.VSCode  .yaml        all
@@ -50,4 +51,3 @@ com.microsoft.VSCode  public.xhtml          all
 com.microsoft.VSCode  public.xml            all
 
 com.microsoft.VSCode  com.netscape.javascript-source  all
-com.microsoft.VSCode  net.daringfireball.markdown     all

@@ -58,7 +58,7 @@ pnb = push-new-branch
 create-new-pr = "!f() { local MAIN_BRANCH=${1-main}; local CURRENT=$(git current); local TITLE=$(echo $CURRENT | gsed -E -e 's/^([^\\/]+\\/|WSB-[0-9]+)(.*)$/\\1: \\2/' -e 's/\\/:/:/' -e 's/-/ /g' -e 's/(WSB) ([0-9]+)/\\1-\\2/' -e 's/[a-z]*/\\u&/g') && (git log --oneline --no-decorate $CURRENT...$MAIN_BRANCH | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B $MAIN_BRANCH -t \"$TITLE\" --web; }; f"
 cnpr = create-new-pr
 create-deploy-pr = ![ $(git current) = main ] || git checkout main && [ $(git rev-list --count ...origin/main) -eq 0 ] || git pull --ff-only && (git log --oneline --no-decorate main...prod | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B prod -t \"Deploy: Prod $(date +%Y-%m-%d)\" --web
-	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash
+fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash
 
 [apply]
 
@@ -86,7 +86,6 @@ precomposeunicode = false
 # Speed up commands involving untracked files such as `git status`.
 # https://git-scm.com/docs/git-update-index#_untracked_cache
 untrackedCache = true
-commitGraph = true
 editor = code -w
 
 [color]
@@ -118,8 +117,7 @@ untracked = cyan
 
 # Detect copies as well as renames
 renames = copies
-tool = bc3
-algorithm = patience
+tool = bcomp
 
 [help]
 
@@ -130,7 +128,19 @@ autocorrect = prompt
 
 # Include summaries of merged commits in newly created merge commit messages
 log = true
-tool = bc3
+tool = bcomp
+
+[difftool]
+  prompt = false
+[difftool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" -ro1 -iu \"$LOCAL\" \"$REMOTE\"
+
+[mergetool]
+  prompt = false
+[mergetool "bcomp"]
+  trustExitCode = true
+  cmd = "/usr/local/bin/bcomp" -ro1 -ro2 \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
 
 [push]
 
@@ -161,29 +171,10 @@ pushInsteadOf = "git://gist.github.com/"
 
 insteadOf = "gist:"
 
-[difftool "sourcetree"]
 
-cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\"
-path = -ro
-
-[mergetool "sourcetree"]
-
-cmd = /usr/local/bin/bcomp \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-trustExitCode = true
 [user]
 name = Jeremy Tweddle
 email = jeremy.tweddle@shopify.com
-[difftool "bc3"]
-trustExitCode = true
-[mergetool "bc3"]
-trustExitCode = true
-[mergetool]
-keepBackup = true
-# [difftool "tower"]
-#     cmd = \"/Applications/Tower.app/Contents/Resources/beyondcompare.sh\" \"$LOCAL\" \"$REMOTE\"
-# [mergetool "tower"]
-#     cmd = \"/Applications/Tower.app/Contents/Resources/beyondcompare.sh\" \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
-#     trustExitCode = false
 
 [filter "lfs"]
 clean = git-lfs clean -- %f
@@ -194,15 +185,5 @@ required = true
 template = /Users/jeremytweddle/.stCommitMsg
 [pull]
 ff = only
-[credential]
-	helper =
-	helper = store --file /opt/dev/var/private/git_credential_store
-[gc]
-writeCommitGraph = true
-[protocol]
-version = 2
-[url "https://github.com/Shopify/"]
-insteadOf = git@github.com:Shopify/
-insteadOf = git@github.com:shopify/
-insteadOf = ssh://git@github.com/Shopify/
-insteadOf = ssh://git@github.com/shopify/
+[include]
+path = /Users/jeremytweddle/.config/dev/gitconfig
