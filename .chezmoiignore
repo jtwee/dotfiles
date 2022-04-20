@@ -1,4 +1,6 @@
-{{- if ne .chezmoi.os "darwin" }}
+{{- if eq .chezmoi.os "darwin" -}}
+install.sh
+{{- else -}}
 .Brewfile
 .config/karabiner
 .duti

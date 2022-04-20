@@ -68,7 +68,7 @@ whitespace = fix
 [core]
 
 # Use custom `.gitignore`
-excludesfile = /Users/jeremytweddle/.gitignore_global
+excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
 
 # Treat spaces before tabs and all kinds of trailing whitespace as an error
 # [default] trailing-space: looks for spaces at the end of a line
@@ -174,7 +174,7 @@ insteadOf = "gist:"
 
 [user]
 name = Jeremy Tweddle
-email = jeremy.tweddle@shopify.com
+email = {{ .email | quote }}
 
 [filter "lfs"]
 clean = git-lfs clean -- %f
@@ -182,8 +182,8 @@ smudge = git-lfs smudge -- %f
 process = git-lfs filter-process
 required = true
 [commit]
-template = /Users/jeremytweddle/.stCommitMsg
+template = {{ .chezmoi.homeDir }}/.stCommitMsg
 [pull]
 ff = only
 [include]
-path = /Users/jeremytweddle/.config/dev/gitconfig
+path = {{ .chezmoi.homeDir }}/.config/dev/gitconfig

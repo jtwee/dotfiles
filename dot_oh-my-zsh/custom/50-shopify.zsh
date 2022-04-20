@@ -1,6 +1,5 @@
 [[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
 if [[ -f /opt/dev/dev.sh ]]; then source /opt/dev/dev.sh; fi
-if [ -e ~/.nix-profile/etc/profile.d/nix.sh ]; then source ~/.nix-profile/etc/profile.d/nix.sh; fi # added by Nix installer
 
 # Shopify dev aliases
 alias d='dev'

@@ -43,46 +43,21 @@ alias lal="ls -lAF ${colorflag}"
 # Always use color output and no quoting for `ls`
 alias ls="command ls ${colorflag}"
 
-# Add an extended regex version of find (like egrep)
-alias efind='find -E'
-
-# Extra names and functions
-alias edit="code -a"
-
-# Common shortcuts
-alias edithosts="code -a /etc/hosts"
-alias editprof="code -a ~/.zshrc"
+# Find aliases
 alias fdirs='find . -type d'
-alias fdotdash="find . -name '._*'"
-alias fdsstore="find . -name '.DS_Store'"
 alias ffiles='find . -type f'
 
-# Show/hide hidden files in Finder
-alias showhidden="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
-alias hidehidden="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
-
-# Hide/show all desktop icons (useful when presenting)
-alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
-alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
-
-# Recursively delete `.DS_Store` files
-alias cleanup="find . -type f \( -name '.DS_Store' -o -name '._*' \) -ls -delete"
+# Add an extended regex version of find (like egrep)
+alias efind='find -E'
 
 # Enable aliases to be sudo'ed
 alias sudo='sudo '
 
-# Enable bash for sudo shell
+# Enable login shell for sudo
 alias lvlup='sudo -s'
-
-# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
-alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g'
 
 # Print each PATH entry on a separate line
 alias path='echo -e ${PATH//:/\\n}'
-
-# IP info
-alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
-alias localip="networksetup -listallnetworkservices | grep -v '\*' | xargs -I{} networksetup -getinfo "{}" | tr '[:upper:]' '[:lower:]' | grep -E '^ip address: \d' | sed 's/ip address: //'"
 
 # Set permisions to
 alias modownf='find . -type f -print0 | xargs -0 -I{} chmod 644 {}'
@@ -96,20 +71,50 @@ alias modgrpd='find . -type d -print0 | xargs -0 -I{} chmod 775 {}'
 alias 'ga.'='git add .'
 alias gs='git status -s'
 alias gfap='git fetch --all && git pull --prune'
-alias gnb='git checkout -b'
 alias grd='git diff origin/$(git_current_branch)..$(git_current_branch)'
 alias gbm='git branch -m'
 alias gbM='git branch -M'
-alias gcubs='git branch --merged $(git_current_branch) --no-contains $(git_current_branch) | grep -vE "^\\s*(main|staging)\\s*\$" | xargs -pL1 git branch -d'
+alias gcubs='git branch --merged $(git_current_branch) --no-contains $(git_current_branch) | grep -vE "^\\s*($(git_main_branch)|staging)\\s*\$" | xargs -pL1 git branch -d'
 alias gfom='git fetch origin main:main'
 alias glpr='git log --pretty=reference --date=local'
 alias gcfxo='git commit --fixup=origin/$(git_current_branch)'
 alias ggc='git gc'
-alias gbrl='git branch --list --ignore-case'
 alias gdtd='git difftool -d'
 alias 'gco-'='git checkout -'
-# alias gpnb='gpsup'
 
+{{ if eq .chezmoi.os "darwin" -}}
+#######################################
+# macOS specifics
+#######################################
+
+# Extra names and functions
+alias edit="code -a"
+
+# Common shortcuts
+alias edithosts="code -a /etc/hosts"
+alias editprof="code -a ~/.zshrc"
+
+# Find aliases
+alias fdotdash="find . -name '._*'"
+alias fdsstore="find . -name '.DS_Store'"
+
+# Show/hide hidden files in Finder
+alias showhidden="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidehidden="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Hide/show all desktop icons (useful when presenting)
+alias hidedesktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias showdesktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
+
+# Recursively delete `.DS_Store` files
+alias cleanup="find . -type f \( -name '.DS_Store' -o -name '._*' \) -ls -delete"
+
+# Get macOS Software Updates, and update installed Ruby gems, Homebrew, npm, and their installed packages
+alias update='sudo softwareupdate -i -a; brew update; brew upgrade; brew cleanup; npm install npm -g; npm update -g'
+
+# IP info
+alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias localip="networksetup -listallnetworkservices | grep -v '\*' | xargs -I{} networksetup -getinfo "{}" | tr '[:upper:]' '[:lower:]' | grep -E '^ip address: \d' | sed 's/ip address: //'"
 
 #######################################
 # Conditional aliases
@@ -331,3 +336,4 @@ function o {
 function treee {
   tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
+{{ end -}}
