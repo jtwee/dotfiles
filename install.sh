@@ -1,6 +1,7 @@
 OMZ_DIR="$HOME/.oh-my-zsh"
 CHEZ_DIR="$HOME/.local/share/chezmoi"
 P10K_DIR="$OMZ_DIR/custom/themes/powerlevel10k"
+BIN_DIR="$HOME/bin"
 
 if [ ! -d "$OMZ_DIR" ]; then
   echo "Installing oh-my-zsh..."
@@ -9,12 +10,12 @@ fi
 
 if ! command -v chezmoi &> /dev/null; then
   echo "Installing Chezmoi..."
-  sh -c "$(curl -fsLS chezmoi.io/get)"
+  sh -c "$(curl -fsLS chezmoi.io/get) -b $BIN_DIR"
 fi
 
-if [ ! -d "$CHEZ_DIR" ]; then
+if [ ! -d "$CHEZ_DIR" ] && [ -x "$BIN_DIR/chezmoi" ]; then
   echo "Configuring dotfiles..."
-  chezmoi init --apply https://github.com/jtwee/dotfiles.git
+  "$BIN_DIR/chezmoi" init --apply https://github.com/jtwee/dotfiles.git
 fi
 
 if [ ! -d "$P10K_DIR" ]; then
