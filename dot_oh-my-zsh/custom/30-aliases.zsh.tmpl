@@ -336,4 +336,37 @@ function o {
 function treee {
   tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
 }
+{{ else -}}
+function openWith {
+  if [[ $# > 0 ]]; then
+    case "$1" in
+      c)
+        opener='code'
+        shift
+        ;;
+      v)
+        opener='vim'
+        shift
+        ;;
+    esac
+  fi
+
+  opener="${opener:-code}"
+
+  if [[ $# == 0 ]]; then
+    $opener .;
+  else
+    $opener "$@";
+  fi
+}
+
+# `c` with no arguments opens the current directory in vscode, otherwise opens the given location
+function c {
+  openWith $0 "$@"
+}
+
+# `v` with no arguments opens the current directory in Vim, otherwise opens the given location
+function v {
+  openWith $0 "$@"
+}
 {{ end -}}
