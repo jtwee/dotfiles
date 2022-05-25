@@ -9,7 +9,7 @@ fi
 
 if ! command -v chezmoi &> /dev/null; then
   echo "Installing Chezmoi..."
-  nix-env -i chezmoi
+  sh -c "$(curl -fsLS chezmoi.io/get)"
 fi
 
 if [ ! -d "$CHEZ_DIR" ]; then
