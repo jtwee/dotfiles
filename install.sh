@@ -7,7 +7,7 @@ if [ ! -d "$OMZ_DIR" ]; then
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
 fi
 
-if [ ! command -v chezmoi &> /dev/null ]; then
+if ! command -v chezmoi &> /dev/null; then
   echo "Installing Chezmoi..."
   nix-env -i chezmoi
 fi
