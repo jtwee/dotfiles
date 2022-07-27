@@ -1,6 +1,3 @@
-[[ -f /opt/dev/sh/chruby/chruby.sh ]] && type chruby >/dev/null 2>&1 || chruby () { source /opt/dev/sh/chruby/chruby.sh; chruby "$@"; }
-if [[ -f /opt/dev/dev.sh ]]; then source /opt/dev/dev.sh; fi
-
 # Shopify dev aliases
 alias d='dev'
 alias ds='dev server'
