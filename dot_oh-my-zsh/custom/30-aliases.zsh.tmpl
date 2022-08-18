@@ -354,6 +354,20 @@ auth       sufficient     pam_tid.so
     ;;
 esac
 }
+
+# Set screenshot location
+function set-screenshot-location {
+  if [[ -z "$1" ]]; then
+    echo "Usage: set-screenshot-location <path>";
+    return 1;
+  fi
+  if [[ ! -d "$1" ]]; then
+    echo "Path $1 does not exist";
+    return 1;
+  fi
+  defaults write com.apple.screencapture location "$1";
+  killall SystemUIServer;
+}
 {{ else -}}
 function openWith {
   if [[ $# > 0 ]]; then
