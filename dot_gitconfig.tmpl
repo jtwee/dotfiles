@@ -1,189 +1,200 @@
 [alias]
 
-# Shortened regular commands
-a = add
-b = branch
-ca = commit --amend
-can = commit --amend --no-edit
-cm = commit -m
-co = checkout
-d = diff
-f = fetch
-gca = gc --auto
-pl = pull
-ps = push
-t = tag
+	# Shortened regular commands
+	a = add
+	b = branch
+	ca = commit --amend
+	can = commit --amend --no-edit
+	cm = commit -m
+	co = checkout
+	d = diff
+	f = fetch
+	gca = gc --auto
+	pl = pull
+	ps = push
+	t = tag
 
-# View abbreviated SHA, description, and history graph of the latest 20 commits
-l = log --pretty=oneline --graph --abbrev-commit
+	# View abbreviated SHA, description, and history graph of the latest 20 commits
+	l = log --pretty=oneline --graph --abbrev-commit
 
-# View the current working tree status using the short format
-s = status -s
+	# View the current working tree status using the short format
+	s = status -s
 
-# Fetch all and prune obsolete
-fap = fetch --all --prune
-fapp = !git fetch --all && git pull --prune
+	# Fetch all and prune obsolete
+	fap = fetch --all --prune
+	fapp = !git fetch --all && git pull --prune
 
-# Add both local and remote tag
-tag-both = "!f() { local TAG=$1; git tag $TAG --force && git push --no-verify origin $TAG --force; }; f"
-tb = tag-both
+	# Add both local and remote tag
+	tag-both = "!f() { local TAG=$1; git tag $TAG --force && git push --no-verify origin $TAG --force; }; f"
+	tb = tag-both
 
-# Delete a local tag
-delete-tag-local = tag -d
-dtl = delete-tag-local
+	# Delete a local tag
+	delete-tag-local = tag -d
+	dtl = delete-tag-local
 
-# Delete a remote tag
-delete-tag-remote = push --no-verify origin --delete
-dtr = delete-tag-remote
+	# Delete a remote tag
+	delete-tag-remote = push --no-verify origin --delete
+	dtr = delete-tag-remote
 
-# Delete both local and remote tag
-delete-tag-both = "!f() { local TAG=$1; git delete-tag-local $TAG && git delete-tag-remote $TAG; }; f"
-dtb = delete-tag-both
+	# Delete both local and remote tag
+	delete-tag-both = "!f() { local TAG=$1; git delete-tag-local $TAG && git delete-tag-remote $TAG; }; f"
+	dtb = delete-tag-both
 
-# Show verbose output about tags, branches or remotes
-tags = tag -l
-branches = branch -a
-remotes = remote -v
+	# Show verbose output about tags, branches or remotes
+	tags = tag -l
+	branches = branch -a
+	remotes = remote -v
 
-current = rev-parse --abbrev-ref HEAD
-remote-diff = "!f() { local CURRENT=$(git current) && git diff ${1-origin}/$CURRENT..$CURRENT; }; f"
-cleanup-branches = "!f() { local CURRENT=$(git current) && git branch --merged $CURRENT --no-contains $CURRENT | grep -vE '^\\s*(main|master|staging)\\s*$' | xargs -pL1 git branch -d; }; f"
-cb = cleanup-branches
-reset-branch = !CURRENT=$(git current) && git reset origin/$CURRENT --hard
-rb = reset-branch
-new-branch = checkout -b
-nb = new-branch
-push-new-branch = !CURRENT=$(git current) && git push -u origin $CURRENT
-pnb = push-new-branch
-create-new-pr = "!f() { local MAIN_BRANCH=${1-main}; local CURRENT=$(git current); local TITLE=$(echo $CURRENT | gsed -E -e 's/^([^\\/]+\\/|WSB-[0-9]+)(.*)$/\\1: \\2/' -e 's/\\/:/:/' -e 's/-/ /g' -e 's/(WSB) ([0-9]+)/\\1-\\2/' -e 's/[a-z]*/\\u&/g') && (git log --oneline --no-decorate $CURRENT...$MAIN_BRANCH | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B $MAIN_BRANCH -t \"$TITLE\" --web; }; f"
-cnpr = create-new-pr
-create-deploy-pr = ![ $(git current) = main ] || git checkout main && [ $(git rev-list --count ...origin/main) -eq 0 ] || git pull --ff-only && (git log --oneline --no-decorate main...prod | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B prod -t \"Deploy: Prod $(date +%Y-%m-%d)\" --web
-fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash
+	current = rev-parse --abbrev-ref HEAD
+	remote-diff = "!f() { local CURRENT=$(git current) && git diff ${1-origin}/$CURRENT..$CURRENT; }; f"
+	cleanup-branches = "!f() { local CURRENT=$(git current) && git branch --merged $CURRENT --no-contains $CURRENT | grep -vE '^\\s*(main|master|staging)\\s*$' | xargs -pL1 git branch -d; }; f"
+	cb = cleanup-branches
+	reset-branch = !CURRENT=$(git current) && git reset origin/$CURRENT --hard
+	rb = reset-branch
+	new-branch = checkout -b
+	nb = new-branch
+	push-new-branch = !CURRENT=$(git current) && git push -u origin $CURRENT
+	pnb = push-new-branch
+	create-new-pr = "!f() { local MAIN_BRANCH=${1-main}; local CURRENT=$(git current); local TITLE=$(echo $CURRENT | gsed -E -e 's/^([^\\/]+\\/|WSB-[0-9]+)(.*)$/\\1: \\2/' -e 's/\\/:/:/' -e 's/-/ /g' -e 's/(WSB) ([0-9]+)/\\1-\\2/' -e 's/[a-z]*/\\u&/g') && (git log --oneline --no-decorate $CURRENT...$MAIN_BRANCH | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B $MAIN_BRANCH -t \"$TITLE\" --web; }; f"
+	cnpr = create-new-pr
+	create-deploy-pr = ![ $(git current) = main ] || git checkout main && [ $(git rev-list --count ...origin/main) -eq 0 ] || git pull --ff-only && (git log --oneline --no-decorate main...prod | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B prod -t \"Deploy: Prod $(date +%Y-%m-%d)\" --web
+	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash
 
 [apply]
 
-# Detect whitespace errors when applying a patch
-whitespace = fix
+	# Detect whitespace errors when applying a patch
+	whitespace = fix
 
 [core]
 
-# Use custom `.gitignore`
-excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
+	# Use custom `.gitignore`
+	excludesfile = {{ .chezmoi.homeDir }}/.gitignore_global
 
-# Treat spaces before tabs and all kinds of trailing whitespace as an error
-# [default] trailing-space: looks for spaces at the end of a line
-# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
-whitespace = space-before-tab,-indent-with-non-tab,trailing-space
+	# Treat spaces before tabs and all kinds of trailing whitespace as an error
+	# [default] trailing-space: looks for spaces at the end of a line
+	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
+	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
 
-# Make `git rebase` safer on macOS
-# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
-trustctime = false
+	# Make `git rebase` safer on macOS
+	# More info: <http://www.git-tower.com/blog/make-git-rebase-safe-on-osx/>
+	trustctime = false
 
-# Prevent showing files whose names contain non-ASCII symbols as unversioned.
-# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
-precomposeunicode = false
+	# Prevent showing files whose names contain non-ASCII symbols as unversioned.
+	# http://michael-kuehnel.de/git/2014/11/21/git-mac-osx-and-german-umlaute.html
+	precomposeunicode = false
 
-# Speed up commands involving untracked files such as `git status`.
-# https://git-scm.com/docs/git-update-index#_untracked_cache
-untrackedCache = true
-editor = code -w
+	# Speed up commands involving untracked files such as `git status`.
+	# https://git-scm.com/docs/git-update-index#_untracked_cache
+	untrackedCache = true
+	editor = code -w
 
 [color]
 
-# Use colors in Git commands that are capable of colored output when
-# outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
-ui = auto
+	# Use colors in Git commands that are capable of colored output when
+	# outputting to the terminal. (This is the default setting in Git ≥ 1.8.4.)
+	ui = auto
 
 [color "branch"]
 
-current = yellow reverse
-local = yellow
-remote = green
+	current = yellow reverse
+	local = yellow
+	remote = green
 
 [color "diff"]
 
-meta = yellow bold
-frag = magenta bold # line info
-old = red           # deletions
-new = green         # additions
+	meta = yellow bold
+	frag = magenta bold # line info
+	old = red # deletions
+	new = green # additions
 
 [color "status"]
 
-added = yellow
-changed = green
-untracked = cyan
+	added = yellow
+	changed = green
+	untracked = cyan
 
 [diff]
 
 # Detect copies as well as renames
-renames = copies
-tool = bcomp
+	renames = copies
+
+{{ if eq .chezmoi.os "darwin" -}}
+	tool = bcomp
+{{ end -}}
 
 [help]
 
-# Automatically correct and execute mistyped commands
-autocorrect = prompt
+	# Automatically correct and execute mistyped commands
+	autocorrect = prompt
 
 [merge]
 
-# Include summaries of merged commits in newly created merge commit messages
-log = true
-tool = bcomp
+	# Include summaries of merged commits in newly created merge commit messages
+	log = true
+
+{{ if eq .chezmoi.os "darwin" -}}
+	tool = bcomp
+{{ end -}}
 
 [difftool]
-  prompt = false
+	prompt = false
 [difftool "bcomp"]
-  trustExitCode = true
-  cmd = "/usr/local/bin/bcomp" -ro1 -iu \"$LOCAL\" \"$REMOTE\"
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" -ro1 -iu \"$LOCAL\" \"$REMOTE\"
 
 [mergetool]
-  prompt = false
+	prompt = false
 [mergetool "bcomp"]
-  trustExitCode = true
-  cmd = "/usr/local/bin/bcomp" -ro1 -ro2 \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
+	trustExitCode = true
+	cmd = "/usr/local/bin/bcomp" -ro1 -ro2 \"$LOCAL\" \"$REMOTE\" \"$BASE\" \"$MERGED\"
 
 [push]
 
-# https://git-scm.com/docs/git-config#git-config-pushdefault
-default = simple
-# Make `git push` push relevant annotated tags when pushing branches out.
-followTags = true
+	# https://git-scm.com/docs/git-config#git-config-pushdefault
+	default = simple
+	# Make `git push` push relevant annotated tags when pushing branches out.
+	followTags = true
 
 # URL shorthands
 
 [url "git@github.com:"]
 
-insteadOf = "gh:"
-pushInsteadOf = "github:"
-pushInsteadOf = "git://github.com/"
+	insteadOf = "gh:"
+	pushInsteadOf = "github:"
+	pushInsteadOf = "git://github.com/"
 
 [url "git://github.com/"]
 
-insteadOf = "github:"
+	insteadOf = "github:"
 
 [url "git@gist.github.com:"]
 
-insteadOf = "gst:"
-pushInsteadOf = "gist:"
-pushInsteadOf = "git://gist.github.com/"
+	insteadOf = "gst:"
+	pushInsteadOf = "gist:"
+	pushInsteadOf = "git://gist.github.com/"
 
 [url "git://gist.github.com/"]
 
-insteadOf = "gist:"
+	insteadOf = "gist:"
 
 
 [user]
-name = Jeremy Tweddle
-email = {{ .email | quote }}
+	name = Jeremy Tweddle
+	email = {{ .email | quote }}
 
 [filter "lfs"]
-clean = git-lfs clean -- %f
-smudge = git-lfs smudge -- %f
-process = git-lfs filter-process
-required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 [commit]
-template = {{ .chezmoi.homeDir }}/.stCommitMsg
+	template = {{ .chezmoi.homeDir }}/.stCommitMsg
 [pull]
-ff = only
+	ff = only
 [include]
-path = {{ .chezmoi.homeDir }}/.config/dev/gitconfig
+	path = {{ .chezmoi.homeDir }}/.config/dev/gitconfig
+
+{{ if eq .chezmoi.os "darwin" -}}
+[sequence]
+	editor = interactive-rebase-tool
+{{ end -}}
