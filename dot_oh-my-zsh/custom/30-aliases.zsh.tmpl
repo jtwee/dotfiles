@@ -76,12 +76,13 @@ alias gbc='git branch | /bin/cat'
 alias gbm='git branch -m'
 alias gbM='git branch -M'
 alias gcubs='git branch --merged $(git_current_branch) --no-contains $(git_current_branch) | grep -vE "^\\s*($(git_main_branch)|staging)\\s*\$" | xargs -pL1 git branch -d'
-alias gfom='git fetch origin main:main'
+alias gfom='git fetch origin $(git_main_branch):$(git_main_branch)'
 alias glpr='git log --pretty=reference --date=local'
 alias gcfxo='git commit --fixup=origin/$(git_current_branch)'
 alias ggc='git gc'
 alias gdtd='git difftool -d'
 alias 'gco-'='git checkout -'
+alias 'gcmsg!'='git commit --amend -m'
 
 {{ if eq .chezmoi.os "darwin" -}}
 #######################################
