@@ -13,7 +13,3 @@ alias dwc='TZ=GMT dev web-checks'
 alias ddupup='dev down && dev update && dev up'
 alias dcd='dev cd'
 alias ddown='dev down'
-
-alias fbs='dev cd fbs'
-alias 'sfn-webhooks'='dev cd sfn-webhooks'
-alias warehouse='dev cd warehouse'
