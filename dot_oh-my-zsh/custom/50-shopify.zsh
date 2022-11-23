@@ -1,15 +1,17 @@
-# Shopify dev aliases
-alias d='dev'
-alias ds='dev server'
-alias da='dev all'
-alias dup='dev up'
-alias dups='dev up && dev server'
-alias dupa='dev up && dev all'
-alias ddup='dev down && dev up'
-alias ddups='dev down && dev up && dev server'
-alias ddupa='dev down && dev up && dev all'
-alias dct='TZ=GMT dev client-test'
-alias dwc='TZ=GMT dev web-checks'
-alias ddupup='dev down && dev update && dev up'
+# Shopify-specific aliases
 alias dcd='dev cd'
-alias ddown='dev down'
+alias osui='dev cd online-store-ui'
+alias osw='dev cd online-store-web'
+
+if [[ $SPIN -ne 1 ]]; then
+  alias ds='dev server'
+  alias da='dev all'
+  alias dup='dev up'
+  alias dups='dev up && dev server'
+  alias dupa='dev up && dev all'
+  alias ddup='dev down && dev up'
+  alias ddups='dev down && dev up && dev server'
+  alias ddupa='dev down && dev up && dev all'
+  alias ddupup='dev down && dev update && dev up'
+  alias ddown='dev down'
+fi
