@@ -3,6 +3,7 @@ install.sh
     {{- $computerName := output "scutil" "--get" "ComputerName" | trim -}}
     {{- if ne $computerName "Jeremy’s Work MacBook" }}
     .config/espanso/match/work.yml
+    .finicky.js
     {{- end }}
 {{- else -}}
 .Brewfile

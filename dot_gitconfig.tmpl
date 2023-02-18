@@ -193,8 +193,3 @@
 	ff = only
 [include]
 	path = {{ .chezmoi.homeDir }}/.config/dev/gitconfig
-
-{{ if eq .chezmoi.os "darwin" -}}
-[sequence]
-	editor = interactive-rebase-tool
-{{ end -}}

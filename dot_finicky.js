@@ -2,44 +2,47 @@
 // Save as ~/.finicky.js
 
 const CHROME_PWAS = {
-	'meet': 'kjgfgldnnfoeklkmfkjfagphfepbbdan',
-	'gmail': 'fmgjjmmmlfnkbppncabfkddbjimcfncm',
+	meet: "kjgfgldnnfoeklkmfkjfagphfepbbdan",
+	gmail: "fmgjjmmmlfnkbppncabfkddbjimcfncm",
+	workplace: "jmhnjadodelkehjlnlddaldfcipngnib",
 };
 
-const openChromePWA = (app = '', url = '') => {
+const openChromePWA = (app = "", url = "", name = "Google Chrome") => {
 	return {
-		name: "Google Chrome",
+		name: name,
 		args: [
 			`--app-id=${CHROME_PWAS[app]}`,
 			`--app-launch-url-for-shortcuts-menu-item=${url}`,
 		],
-	}
+	};
 };
 
 module.exports = {
 	defaultBrowser: "Google Chrome",
 	options: {
-	  hideIcon: true,
+		hideIcon: true,
 	},
 	handlers: [
 		{
-			match: ({ opener, url }) => opener.name === 'Meeter' && url.host.includes("google.com"),
+			match: ({ opener, url }) =>
+				opener.name === "Meeter" && url.host.includes("google.com"),
 			browser: ({ urlString, url }) => {
 				const meetingUrl = url.search.replace(/^.*continue=([^&]+).*$/, "$1");
-				return openChromePWA('meet', meetingUrl);
+				return openChromePWA("meet", meetingUrl);
 			},
 		},
 		{
 			match: ({ url }) => url.host === "meet.google.com",
-			browser: ({ urlString }) => {
-				return openChromePWA('meet', urlString);
-			},
+			browser: ({ urlString }) => openChromePWA("meet", urlString),
 		},
 		{
 			match: ({ url }) => url.host === "mail.google.com",
-			browser: ({ urlString }) => {
-				return openChromePWA('gmail', urlString);
-			},
+			browser: ({ urlString }) => openChromePWA("gmail", urlString),
+		},
+		{
+			match: finicky.matchHostnames(["shopify.workplace.com"]),
+			browser: ({ urlString }) =>
+				openChromePWA("workplace", urlString, "Workplace"),
 		},
 	],
 };
