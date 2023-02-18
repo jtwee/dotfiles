@@ -1,8 +1,13 @@
 {{- if eq .chezmoi.os "darwin" -}}
 install.sh
+    {{- $computerName := output "scutil" "--get" "ComputerName" | trim -}}
+    {{- if ne $computerName "Jeremy’s Work MacBook" }}
+    .config/espanso/match/work.yml
+    {{- end }}
 {{- else -}}
 .Brewfile
 .config/karabiner
+.config/espanso
 .duti
 .finicky.js
 .hushlogin

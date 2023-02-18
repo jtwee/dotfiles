@@ -1,0 +1,6 @@
+# espanso configuration file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+# Enable/disable the config auto-reload after a file change is detected.
+auto_restart: true

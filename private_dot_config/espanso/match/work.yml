@@ -1,0 +1,23 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+matches:
+
+  - trigger: ";dev1"
+    replace: "sdrawkcab-yfipohs.myshopify.com/admin"
+
+  - trigger: ";dev2"
+    replace: "jeremyt-dev.myshopify.com/admin"
+
+  - trigger: ";ghbai"
+    replace: |
+      | Before | After |
+      | :----: | :---: |
+      | <img src=""> | <img src=""> |
+
+  - trigger: ";ghbav"
+    replace: |
+      | Before | After |
+      | :----: | :---: |
+      | <video src=""> | <video src=""> |

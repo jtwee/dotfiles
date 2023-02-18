@@ -1,0 +1,40 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+matches:
+
+  # Print the current date
+  - trigger: ";date"
+    replace: "{{mydate}}"
+    vars:
+      - name: mydate
+        type: date
+        params:
+          format: "%Y/%m/%d"
+
+  - trigger: ";time"
+    replace: "{{mytime}}"
+    vars:
+      - name: mytime
+        type: date
+        params:
+          format: "%H:%M:%S"
+
+  - trigger: ";wem"
+    replace: "jeremy.tweddle@shopify.com"
+
+  - trigger: ";pem"
+    replace: "jeremy@breams.net"
+
+  - trigger: ";fn"
+    replace: "Jeremy"
+
+  - trigger: ";ln"
+    replace: "Tweddle"
+
+  - trigger: ";name"
+    replace: "Jeremy Tweddle"
+
+  - trigger: ";ph"
+    replace: "4379953595"
