@@ -14,10 +14,10 @@ matches:
     replace: |
       | Before | After |
       | :----: | :---: |
-      | <img src=""> | <img src=""> |
+      | <img src="$|$"> | <img src=""> |
 
   - trigger: ";ghbav"
     replace: |
       | Before | After |
       | :----: | :---: |
-      | <video src=""> | <video src=""> |
+      | <video src="$|$"> | <video src=""> |

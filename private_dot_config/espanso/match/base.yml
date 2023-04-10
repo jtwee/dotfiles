@@ -13,6 +13,7 @@ matches:
         params:
           format: "%Y/%m/%d"
 
+  # Print the current time
   - trigger: ";time"
     replace: "{{mytime}}"
     vars:
