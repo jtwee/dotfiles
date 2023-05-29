@@ -85,6 +85,7 @@ alias ggc='git gc'
 alias gdtd='git difftool -d'
 alias 'gco-'='git checkout -'
 alias 'gcmsg!'='git commit --amend -m'
+alias gwip='git add -A .; git rm $(git ls-files --deleted) 2> /dev/null; git commit --message "[WIP]"'
 
 {{ if eq .chezmoi.os "darwin" -}}
 #######################################
