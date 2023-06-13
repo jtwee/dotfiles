@@ -89,6 +89,7 @@ alias gwip='git add -A .; git rm $(git ls-files --deleted) 2> /dev/null; git com
 alias 'gacn!'='git add . && git commit --no-edit --amend'
 alias 'gacnp!'='git add . && git commit --no-edit --amend && git push --force-with-lease --force-if-includes'
 alias gdtcb='git diff-tree --no-commit-id --name-only -r $(git_current_branch)'
+alias gacmsg='git add . && git commit -m'
 
 {{ if eq .chezmoi.os "darwin" -}}
 #######################################
