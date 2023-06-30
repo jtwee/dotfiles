@@ -7,7 +7,16 @@ alias shp='dev cd shopify'
 alias web='dev cd web'
 
 if [[ $SPIN -ne 1 ]]; then
-  function suposw {
+  function current_repo {
+    local repo=$(git rev-parse --show-toplevel 2> /dev/null)
+    if [[ $? -ne 0 ]]; then
+      return 1
+    fi
+    echo `basename $repo`
+  }
+
+  function sup {
+    local repo=""
     local branch=""
     local name=""
     local input="$@"
@@ -30,6 +39,13 @@ if [[ $SPIN -ne 1 ]]; then
           shift
         fi
         ;;
+      -r=* | --repo=*)
+        if [[ -z $repo ]]; then
+          repo=${1/"--repo="/"-r="}
+          repo=${repo/#"-r="/}
+          shift
+        fi
+        ;;
       *)
         if [[ -z $name && ! $1 = -* ]]; then
           name=${1/"--name="/"-n="}
@@ -45,15 +61,25 @@ if [[ $SPIN -ne 1 ]]; then
       fi
     done
 
+    repo="${repo:-$(current_repo)}"
+
+    if [[ -z $repo ]]; then
+      echo "Missing required argument: --repo"
+      return 1
+    fi
+
     name="${name:-$branch}"
 
     if [[ ! -z $branch ]]; then
-      args=("${args[@]}" "--config" "online-store-web.branch=$branch")
+      args=("${args[@]}" "--config" "$repo.branch=$branch")
     fi
     if [[ ! -z $name ]]; then
       args=("${args[@]}" "--name" "${name//[^a-z0-9-]/-}")
     fi
 
-    spin up online-store-web --config shopify.env.SHOP_1_BETA_FLAGS='metaobject_pages' --wait "${args[@]}"
+    spin up $repo --config shopify.env.SHOP_1_BETA_FLAGS='metaobject_pages' --wait "${args[@]}"
   }
+
+  alias suposw='sup --repo=online-store-web'
+  alias supweb='sup --repo=web'
 fi
