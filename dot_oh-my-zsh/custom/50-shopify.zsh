@@ -21,35 +21,43 @@ if [[ $SPIN -ne 1 ]]; then
     local name=""
     local input="$@"
     local args=()
+    local raw_args=()
 
     while (($#)); do
       local params=$#
       case "$1" in
       -b=* | --branch=*)
         if [[ -z $branch ]]; then
-          branch=${1/"--branch="/"-b="}
-          branch=${branch/#"-b="/}
+          branch=${1/--branch=/-b=}
+          branch=${branch/#-b=/}
           shift
         fi
         ;;
       -n=* | --name=*)
         if [[ -z $name ]]; then
-          name=${1/"--name="/"-n="}
-          name=${name/#"-n="/}
+          name=${1/--name=/-n=}
+          name=${name/#-n=/}
           shift
         fi
         ;;
       -r=* | --repo=*)
         if [[ -z $repo ]]; then
-          repo=${1/"--repo="/"-r="}
-          repo=${repo/#"-r="/}
+          repo=${1/--repo=/-r=}
+          repo=${repo/#-r=/}
           shift
         fi
         ;;
+      --)
+        shift
+        raw_args=("$@")
+        while (($#)); do
+          shift
+        done
+        ;;
       *)
         if [[ -z $name && ! $1 = -* ]]; then
-          name=${1/"--name="/"-n="}
-          name=${name/#"-n="/}
+          name=${1/--name=/-n=}
+          name=${name/#-n=/}
           shift
         fi
         ;;
@@ -61,14 +69,14 @@ if [[ $SPIN -ne 1 ]]; then
       fi
     done
 
-    repo="${repo:-$(current_repo)}"
+    [[ -z $repo ]] && repo=`current_repo`
 
     if [[ -z $repo ]]; then
       echo "Missing required argument: --repo"
       return 1
     fi
 
-    name="${name:-$branch}"
+    [[ -z $name ]] && name=${branch/#jtwee\//}
 
     if [[ ! -z $branch ]]; then
       args=("${args[@]}" "--config" "$repo.branch=$branch")
@@ -77,7 +85,7 @@ if [[ $SPIN -ne 1 ]]; then
       args=("${args[@]}" "--name" "${name//[^a-z0-9-]/-}")
     fi
 
-    spin up $repo --config shopify.env.SHOP_1_BETA_FLAGS='metaobject_pages' --wait "${args[@]}"
+    spin up $repo --config shopify.env.SHOP_1_BETA_FLAGS='metaobject_pages' --wait "${args[@]}" "${raw_args[@]}"
   }
 
   alias suposw='sup --repo=online-store-web'
