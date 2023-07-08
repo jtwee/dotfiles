@@ -5,7 +5,7 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 
 " Use the Sunburst theme
-colorscheme sunburst
+colorscheme Sunburst
 
 " Make Vim more useful
 set nocompatible
@@ -27,9 +27,18 @@ let mapleader=","
 set binary
 set noeol
 " Centralize backups, swapfiles and undo history
+if !isdirectory($HOME."/.vim/backups")
+	call mkdir($HOME."/.vim/backups", "p")
+endif
 set backupdir=~/.vim/backups
+if !isdirectory($HOME."/.vim/swaps")
+	call mkdir($HOME."/.vim/swaps", "p")
+endif
 set directory=~/.vim/swaps
 if exists("&undodir")
+	if !isdirectory($HOME."/.vim/undo")
+		call mkdir($HOME."/.vim/undo", "p")
+	endif
 	set undodir=~/.vim/undo
 endif
 
