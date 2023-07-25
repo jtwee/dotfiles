@@ -1,0 +1,99 @@
+# Shopify-specific aliases
+alias dcd='dev cd'
+alias osui='dev cd online-store-ui'
+alias osw='dev cd online-store-web'
+alias sfr='dev cd storefront-renderer'
+alias shp='dev cd shopify'
+alias web='dev cd web'
+
+{{ if eq .chezmoi.os "darwin" -}}
+function current_repo {
+  local repo=$(git rev-parse --show-toplevel 2> /dev/null)
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+  echo `basename $repo`
+}
+
+function sup {
+  local repo=""
+  local branch=""
+  local name=""
+  local input="$@"
+  local args=()
+  local raw_args=()
+
+  while (($#)); do
+    local params=$#
+    case "$1" in
+    -b=* | --branch=*)
+      if [[ -z $branch ]]; then
+        branch=${1/--branch=/-b=}
+        branch=${branch/#-b=/}
+        shift
+      fi
+      ;;
+    -n=* | --name=*)
+      if [[ -z $name ]]; then
+        name=${1/--name=/-n=}
+        name=${name/#-n=/}
+        shift
+      fi
+      ;;
+    -r=* | --repo=*)
+      if [[ -z $repo ]]; then
+        repo=${1/--repo=/-r=}
+        repo=${repo/#-r=/}
+        shift
+      fi
+      ;;
+    --)
+      shift
+      raw_args=("$@")
+      while (($#)); do
+        shift
+      done
+      ;;
+    *)
+      if [[ -z $name && ! $1 = -* ]]; then
+        name=${1/--name=/-n=}
+        name=${name/#-n=/}
+        shift
+      fi
+      ;;
+    esac
+
+    if [[ $# == $params ]]; then
+      echo "Incorrect arguments provided: \"$input\""
+      return 1
+    fi
+  done
+
+  [[ -z $repo ]] && repo=`current_repo`
+
+  if [[ -z $repo ]]; then
+    echo "Missing required argument: --repo"
+    return 1
+  fi
+
+  [[ -z $name ]] && name=${branch/#jtwee\//}
+
+  if [[ ! -z $branch ]]; then
+    args=("${args[@]}" "--config" "$repo.branch=$branch")
+  fi
+  if [[ ! -z $name ]]; then
+    args=("${args[@]}" "--name" "${name//[^a-z0-9-]/-}")
+  fi
+
+  spin up $repo --config shopify.env.SHOP_1_BETA_FLAGS='metaobject_pages' --wait "${args[@]}" "${raw_args[@]}"
+}
+
+alias suposw='sup --repo=online-store-web'
+alias supweb='sup --repo=web'
+{{ else -}}
+if [[ $TERM_PROGRAM == vscode ]]; then
+  export GIT_EDITOR="code -w"
+else
+  export GIT_EDITOR="vim"
+fi
+{{ end -}}
