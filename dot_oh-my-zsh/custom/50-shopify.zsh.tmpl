@@ -85,7 +85,7 @@ function sup {
     args=("${args[@]}" "--name" "${name//[^a-z0-9-]/-}")
   fi
 
-  spin up $repo --config shopify.env.SHOP_1_BETA_FLAGS='metaobject_pages' --wait "${args[@]}" "${raw_args[@]}"
+  spin up $repo --wait "${args[@]}" "${raw_args[@]}"
 }
 
 alias suposw='sup --repo=online-store-web'
