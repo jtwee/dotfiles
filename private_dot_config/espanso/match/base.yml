@@ -13,6 +13,15 @@ matches:
         params:
           format: "%Y/%m/%d"
 
+  # Print the current date as a datestamp
+  - trigger: ";ds"
+    replace: "{{mydatestamp}}"
+    vars:
+      - name: mydatestamp
+        type: date
+        params:
+          format: "%Y%m%d"
+
   # Print the current time
   - trigger: ";time"
     replace: "{{mytime}}"
@@ -21,6 +30,15 @@ matches:
         type: date
         params:
           format: "%H:%M:%S"
+
+  # Print the current time as a timestamp
+  - trigger: ";ts"
+    replace: "{{mytimestamp}}"
+    vars:
+      - name: mytimestamp
+        type: date
+        params:
+          format: "%H%M%S"
 
   - trigger: ";wem"
     replace: "jeremy.tweddle@shopify.com"

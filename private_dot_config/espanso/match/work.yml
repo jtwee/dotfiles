@@ -21,3 +21,132 @@ matches:
       | Before | After |
       | :----: | :---: |
       | <video src="$|$"> | <video src=""> |
+  - trigger: ";allset"
+    replace: |
+      <div class="all_settings">
+        <pre>
+          color: {{section.settings.color}}
+          text: {{ section.settings.text }}
+          textarea: {{ section.settings.textarea }}
+          richtext: {{ section.settings.richtext }}
+          inline_richtext: {{ section.settings.inline_richtext }}
+          url: {{ section.settings.url }}
+          number: {{ section.settings.number }}
+          range: {{ section.settings.range }}
+          radio: {{ section.settings.radio }}
+          select: {{ section.settings.select }}
+          checkbox: {{ section.settings.checkbox }}
+          font_picker: {{ section.settings.font_picker }}
+          collection: {{ section.settings.collection }}
+          collection_list: {{ section.settings.collection_list }}
+          product: {{ section.settings.product }}
+          product_list: {{ section.settings.product_list }}
+          blog: {{ section.settings.blog }}
+          page: {{ section.settings.page }}
+          article: {{ section.settings.article }}
+          menu: {{ section.settings.link_list }}
+          youtube_video_url: {{ section.settings.youtube_video_url }}
+          vimeo_video_url: {{ section.settings.vimeo_video_url }}
+          html: {{ section.settings.html }}
+          image_picker: {{ section.settings.image_picker }}
+        </pre>
+        {% for block in section.blocks %}
+          {% case block.type %}
+            {% when "all_settings_block" %}
+              <pre>
+                color: {{block.settings.color}}
+                text: {{ block.settings.text }}
+                textarea: {{ block.settings.textarea }}
+                richtext: {{ block.settings.richtext }}
+                inline_richtext: {{ block.settings.inline_richtext }}
+                url: {{ block.settings.url }}
+                number: {{ block.settings.number }}
+                range: {{ block.settings.range }}
+                radio: {{ block.settings.radio }}
+                select: {{ block.settings.select }}
+                checkbox: {{ block.settings.checkbox }}
+                font_picker: {{ block.settings.font_picker }}
+                collection: {{ block.settings.collection }}
+                collection_list: {{ block.settings.collection_list }}
+                product: {{ block.settings.product }}
+                product_list: {{ block.settings.product_list }}
+                blog: {{ block.settings.blog }}
+                page: {{ block.settings.page }}
+                article: {{ block.settings.article }}
+                menu: {{ block.settings.link_list }}
+                youtube_video_url: {{ block.settings.youtube_video_url }}
+                vimeo_video_url: {{ block.settings.vimeo_video_url }}
+                html: {{ block.settings.html }}
+                image_picker: {{ block.settings.image_picker }}
+              </pre>
+          {% endcase %}
+        {% endfor %}
+      </div>
+      {% schema %}
+      {
+        "settings":[
+          {"type": "color", "id": "color", "label": "Color", "default": "#000000", "info": "Color helptext"},
+          {"type": "text","id":"text","label":"label:text", "default": "Text default", "info": "Text helptext"},
+          {"type": "textarea","id":"textarea","label":"textarea", "default": "Textarea default", "info": "Textarea helptext"},
+          {"type": "richtext","id":"richtext","label":"Richtext", "default": "<p>Product title: </p>", "info": "Richtext helptext"},
+          {"type": "inline_richtext","id":"inline_richtext","label":"Inline Richtext", "default": "Inline Richtext default", "info": "Inline Richtext helptext"},
+          {"type": "url","id":"url","label":"Url", "info": "Url helptext" },
+          {"type": "number","id":"number","label":"Number", "default": 10, "info": "Number helptext"},
+          {"type": "range", "id": "range", "label": "Range", "default": 3, "min": 0, "max": 100, "step": 1},
+          {"type": "radio", "id": "radio", "label": "Radio", "options": [{"value": "one", "label": "Radio one"}, {"value": "two", "label": "Radio two"}], "default": "one", "info": "Radio help text"},
+          {"type": "select", "id": "select", "label": "Select", "options": [{"value": "one", "label": "Select one"}, {"value": "two", "label": "Select two"}], "default": "one", "info": "Select help text"},
+          {"type": "checkbox", "id": "checkbox", "label": "Checkbox", "default": true, "info": "Checkbox help text"},
+          {"type": "font_picker", "id": "font_picker", "label": "FontPicker", "default": "helvetica_n4", "info": "FontPicker helptext"},
+          {"type": "collection", "id": "collection", "label": "Collection", "info": "Collection helptext"},
+          {"type": "collection_list", "id": "collection_list", "label": "Collection list", "info": "Collection  listhelptext"},
+          {"type": "product", "id": "product", "label": "Product", "info": "Product help text"},
+          {"type": "product_list", "id": "product_list", "label": "Product list", "info": "Product list help text"},
+          {"type": "blog", "id": "blog", "label": "Blog", "info": "Blog help text"},
+          {"type": "page", "id": "page", "label": "Page", "info": "Page help text"},
+          {"type": "article", "id": "article", "label": "Article", "info": "Article help text"},
+          {"type": "link_list", "id": "link_list", "label": "Menu", "info": "Menu help text"},
+          {"type": "video_url", "id": "youtube_video_url", "label": "Youtube video url", "info": "Youtube video url help text", "accept": ["youtube"], "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"},
+          {"type": "video_url", "id": "vimeo_video_url", "label": "Vimeo video url", "info": "Vimeo video url help text", "accept": ["vimeo"], "default": "https://vimeo.com/22439234"},
+          {"type": "html", "id": "html", "label": "HTML", "info": "Html help text", "default": "<p>hello world</p>"},
+          {"type": "image_picker", "id": "image_picker", "label": "Image picker", "info": "Image picker help text"}
+        ],
+        "blocks": [
+          {
+            "name": "All settings block",
+            "type": "all_settings_block",
+            "settings": [
+              {"type": "color", "id": "color", "label": "Color", "default": "#000000", "info": "Color helptext"},
+              {"type": "text","id":"text","label":"label:text", "default": "Text default", "info": "Text helptext"},
+              {"type": "textarea","id":"textarea","label":"textarea", "default": "Textarea default", "info": "Textarea helptext"},
+              {"type": "richtext","id":"richtext","label":"Richtext", "default": "<p>Richtext default</p>", "info": "Richtext helptext"},
+              {"type": "inline_richtext","id":"inline_richtext","label":"Inline Richtext", "default": "Inline Richtext default", "info": "Inline Richtext helptext"},
+              {"type": "url","id":"url","label":"Url", "info": "Url helptext" },
+              {"type": "number","id":"number","label":"Number", "default": 10, "info": "Number helptext"},
+              {"type": "range", "id": "range", "label": "Range", "default": 3, "min": 0, "max": 100, "step": 1},
+              {"type": "radio", "id": "radio", "label": "Radio", "options": [{"value": "one", "label": "Radio one"}, {"value": "two", "label": "Radio two"}], "default": "one", "info": "Radio help text"},
+              {"type": "select", "id": "select", "label": "Select", "options": [{"value": "one", "label": "Select one"}, {"value": "two", "label": "Select two"}], "default": "one", "info": "Select help text"},
+              {"type": "checkbox", "id": "checkbox", "label": "Checkbox", "default": true, "info": "Checkbox help text"},
+              {"type": "font_picker", "id": "font_picker", "label": "FontPicker", "default": "helvetica_n4", "info": "FontPicker helptext"},
+              {"type": "collection", "id": "collection", "label": "Collection", "info": "Collection helptext"},
+              {"type": "collection_list", "id": "collection_list", "label": "Collection list", "info": "Collection  listhelptext"},
+              {"type": "product", "id": "product", "label": "Product", "info": "Product help text"},
+              {"type": "product_list", "id": "product_list", "label": "Product list", "info": "Product list help text"},
+              {"type": "blog", "id": "blog", "label": "Blog", "info": "Blog help text"},
+              {"type": "page", "id": "page", "label": "Page", "info": "Page help text"},
+              {"type": "article", "id": "article", "label": "Article", "info": "Article help text"},
+              {"type": "link_list", "id": "link_list", "label": "Menu", "info": "Menu help text"},
+              {"type": "video_url", "id": "youtube_video_url", "label": "Youtube video url", "info": "Youtube video url help text", "accept": ["youtube"], "default": "https://www.youtube.com/watch?v=_9VUPq3SxOc"},
+              {"type": "video_url", "id": "vimeo_video_url", "label": "Vimeo video url", "info": "Vimeo video url help text", "accept": ["vimeo"], "default": "https://vimeo.com/22439234"},
+              {"type": "html", "id": "html", "label": "HTML", "info": "Html help text", "default": "<p>hello world</p>"},
+              {"type": "image_picker", "id": "image_picker", "label": "Image picker", "info": "Image picker help text"}
+            ]
+          }
+        ],
+        "presets": [{
+          "name": "All settings",
+          "category": "Debug",
+          "settings": {
+          }
+        }]
+      }
+      {% endschema %}
