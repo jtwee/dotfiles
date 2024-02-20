@@ -5,6 +5,8 @@ alias osw='dev cd online-store-web'
 alias sfr='dev cd storefront-renderer'
 alias shp='dev cd shopify'
 alias web='dev cd web'
+alias dur='dev up && dev refresh'
+alias ydur='yarn refresh-graphql && dev up && dev refresh'
 
 {{ if eq .chezmoi.os "darwin" -}}
 function current_repo {
@@ -14,6 +16,8 @@ function current_repo {
   fi
   echo `basename $repo`
 }
+
+export DEFAULT_SPIN_BETA_FLAGS='custom_data_product_taxonomy custom_data_product_taxonomy_active_dev'
 
 function sup {
   local repo=""
@@ -85,7 +89,8 @@ function sup {
     args=("${args[@]}" "--name" "${name//[^a-z0-9-]/-}")
   fi
 
-  spin up --config shopify.env.SHOP_1_BETA_FLAGS='custom_data_product_taxonomy_ux' $repo --wait "${args[@]}" "${raw_args[@]}"
+  echo spin up --config shopify.env.SHOP_1_BETA_FLAGS="'${DEFAULT_SPIN_BETA_FLAGS}'" $repo --wait "${args[@]}" "${raw_args[@]}"
+  spin up --config shopify.env.SHOP_1_BETA_FLAGS="'${DEFAULT_SPIN_BETA_FLAGS}'" $repo --wait "${args[@]}" "${raw_args[@]}"
 }
 
 alias suposw='sup --repo=online-store-web'
