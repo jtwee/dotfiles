@@ -3,7 +3,6 @@
 # For a complete introduction, visit the official docs at: https://espanso.org/docs/
 
 matches:
-
   - trigger: ";dev1"
     replace: "sdrawkcab-yfipohs.myshopify.com/admin"
 
@@ -21,6 +20,13 @@ matches:
       | Before | After |
       | :----: | :---: |
       | <video src="$|$"> | <video src=""> |
+  - trigger: ";ghdet"
+    replace: |
+      <details>
+      <summary><h3>Designs/screenshots</h3></summary>
+      
+      $|$
+      </details>
   - trigger: ";allset"
     replace: |
       <div class="all_settings">
