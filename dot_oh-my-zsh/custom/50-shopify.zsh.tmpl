@@ -5,8 +5,7 @@ alias osw='dev cd online-store-web'
 alias sfr='dev cd storefront-renderer'
 alias shp='dev cd shopify'
 alias web='dev cd web'
-alias dur='dev up && dev refresh'
-alias ydur='yarn refresh-graphql && dev up && dev refresh'
+alias dref='dev refresh'
 
 {{ if eq .chezmoi.os "darwin" -}}
 function current_repo {
