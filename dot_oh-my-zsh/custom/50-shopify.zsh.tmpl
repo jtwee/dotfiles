@@ -16,7 +16,7 @@ function current_repo {
   echo `basename $repo`
 }
 
-export DEFAULT_SPIN_BETA_FLAGS='custom_data_product_taxonomy custom_data_product_taxonomy_active_dev'
+export DEFAULT_SPIN_BETA_FLAGS="file_picker_in_product_detail_page"
 
 function sup {
   local repo=""
@@ -82,18 +82,18 @@ function sup {
   [[ -z $name ]] && name=${branch/#jtwee\//}
 
   if [[ ! -z $branch ]]; then
-    args=("${args[@]}" "--config" "$repo.branch=$branch")
+    repo="$repo@$branch"
   fi
   if [[ ! -z $name ]]; then
     args=("${args[@]}" "--name" "${name//[^a-z0-9-]/-}")
   fi
 
-  echo spin up --config shopify.env.SHOP_1_BETA_FLAGS="'${DEFAULT_SPIN_BETA_FLAGS}'" $repo --wait "${args[@]}" "${raw_args[@]}"
-  spin up --config shopify.env.SHOP_1_BETA_FLAGS="'${DEFAULT_SPIN_BETA_FLAGS}'" $repo --wait "${args[@]}" "${raw_args[@]}"
+  echo spin up --config shopify.env.SHOP_1_BETA_FLAGS="${DEFAULT_SPIN_BETA_FLAGS}" $repo --wait "${args[@]}" "${raw_args[@]}"
+  spin up --config shopify.env.SHOP_1_BETA_FLAGS="${DEFAULT_SPIN_BETA_FLAGS}" $repo --wait "${args[@]}" "${raw_args[@]}"
 }
 
 alias suposw='sup --repo=online-store-web'
-alias supweb='sup --repo=web'
+alias supweb='sup --repo=web:minimal'
 {{ else -}}
 if [[ $TERM_PROGRAM == vscode ]]; then
   export GIT_EDITOR="code -w"
