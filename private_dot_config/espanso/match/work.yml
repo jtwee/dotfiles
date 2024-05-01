@@ -24,9 +24,12 @@ matches:
     replace: |
       <details>
       <summary><h3>Designs/screenshots</h3></summary>
-      
+
       $|$
       </details>
+  - trigger: ";spin"
+    replace: "**🌀 Spinstance:** "
+
   - trigger: ";allset"
     replace: |
       <div class="all_settings">
