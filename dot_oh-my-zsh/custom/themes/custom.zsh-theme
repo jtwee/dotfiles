@@ -26,15 +26,15 @@ ZSH_THEME_GIT_PROMPT_UNTRACKED="%{$_theme_cyan%}?"
 ZSH_THEME_GIT_PROMPT_CLEAN="%{$_theme_green%}✔"
 
 if [[ $SPIN -eq 1 || -n $SSH_CONNECTION ]]; then
-  _theme_yellow='%F{222}'
+	_theme_yellow='%F{222}'
 fi
 
 if [[ $SPIN -eq 1 ]]; then
-  _prompt_hostname="$_spin_blue%{꩜%G%}  $_theme_yellow"
+	_prompt_hostname="$_spin_blue%{꩜%G%}  $_theme_yellow"
 elif [[ -n $SSH_CONNECTION ]]; then
-  _prompt_hostname="$_theme_red%m$_reset_color:$_theme_yellow"
+	_prompt_hostname="$_theme_red%m$_reset_color:$_theme_yellow"
 else
-  _prompt_hostname=''
+	_prompt_hostname=''
 fi
 
 PROMPT=$'%{$_theme_yellow%}$_prompt_hostname%~%{$_reset_color%} $(git_super_status) %(?.%{$_theme_grey%}.%{$_theme_red%})%(!.#.$)%{$_reset_color%} '

@@ -4,9 +4,9 @@ setopt hist_expire_dups_first
 setopt hist_ignore_all_dups
 
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+	export EDITOR='vim'
 else
-  export EDITOR='code -w';
+	export EDITOR='code -w'
 fi
 
 export LANG="en_US.UTF-8"
@@ -17,9 +17,9 @@ KEYTIMEOUT=10
 bindkey -M menuselect '\e' send-break
 bindkey '^ ' autosuggest-accept
 
-_esc_to_clear_things () {
-  zle kill-line
-  zle autosuggest-clear
+_esc_to_clear_things() {
+	zle kill-line
+	zle autosuggest-clear
 }
 zle -N _esc_to_clear_things
 bindkey '\e' _esc_to_clear_things

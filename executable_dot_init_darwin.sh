@@ -3,9 +3,9 @@
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 if [[ $CPUTYPE == 'arm64' ]]; then
-  brew_prefix='/opt/homebrew'
+	brew_prefix='/opt/homebrew'
 else
-  brew_prefix='/usr/local'
+	brew_prefix='/usr/local'
 fi
 
 ${brew_prefix}/bin/brew install chezmoi
