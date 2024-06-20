@@ -30,6 +30,9 @@ matches:
   - trigger: ";spin"
     replace: "**🌀 Spinstance:** "
 
+  - trigger: ;th
+    replace: "🎩 ✨ 👍"
+
   - trigger: ";allset"
     replace: |
       <div class="all_settings">
