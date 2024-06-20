@@ -55,10 +55,13 @@
 	nb = new-branch
 	push-new-branch = !CURRENT=$(git current) && git push -u origin $CURRENT
 	pnb = push-new-branch
+	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash
+	last = "!f() { seq 1 $1 | xargs -I{} git name-rev --name-only --exclude=refs/tags/* \"@{-{}}\"; }; f"
+	{{ if eq .chezmoi.os "darwin" -}}
 	create-new-pr = "!f() { local MAIN_BRANCH=${1-main}; local CURRENT=$(git current); local TITLE=$(echo $CURRENT | gsed -E -e 's/^([^\\/]+\\/|WSB-[0-9]+)(.*)$/\\1: \\2/' -e 's/\\/:/:/' -e 's/-/ /g' -e 's/(WSB) ([0-9]+)/\\1-\\2/' -e 's/[a-z]*/\\u&/g') && (git log --oneline --no-decorate $CURRENT...$MAIN_BRANCH | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B $MAIN_BRANCH -t \"$TITLE\" --web; }; f"
 	cnpr = create-new-pr
 	create-deploy-pr = ![ $(git current) = main ] || git checkout main && [ $(git rev-list --count ...origin/main) -eq 0 ] || git pull --ff-only && (git log --oneline --no-decorate main...prod | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B prod -t \"Deploy: Prod $(date +%Y-%m-%d)\" --web
-	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash
+{{ end -}}
 
 [apply]
 
