@@ -6,6 +6,11 @@ alias sfr='dev cd storefront-renderer'
 alias shp='dev cd shopify'
 alias web='dev cd web'
 alias dref='dev refresh'
+alias drup='dev reup'
+
+if [ "$SPIN" ]; then
+	dev config set suppress-info.notifications.up true
+fi
 
 {{ if eq .chezmoi.os "darwin" -}}
 function current_repo {
