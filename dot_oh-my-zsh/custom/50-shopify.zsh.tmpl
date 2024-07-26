@@ -33,9 +33,11 @@ function sup {
 	local repo=""
 	local branch=""
 	local name=""
+	local flags=""
 	local input="$@"
 	local args=()
 	local raw_args=()
+	local name_length=48
 
 	while (($#)); do
 		local params=$#
@@ -61,6 +63,13 @@ function sup {
 				shift
 			fi
 			;;
+		-f=* | --flags=*)
+			if [[ -z $flags ]]; then
+				flags=${1/--flags=/-f=}
+				flags=${flags/#-f=/}
+				shift
+			fi
+			;;
 		--)
 			shift
 			raw_args=("$@")
@@ -78,7 +87,7 @@ function sup {
 		esac
 
 		if [[ $# == $params ]]; then
-			echo "Incorrect arguments provided: \"$input\""
+			echo "Incorrect arguments provided ($# leftover): \"$@\""
 			return 1
 		fi
 	done
@@ -90,21 +99,30 @@ function sup {
 		return 1
 	fi
 
-	[[ -z $name ]] && name=${branch/#jtwee\//}
+	if [[ -z $flags ]]; then
+		flags=$DEFAULT_SPIN_BETA_FLAGS
+	fi
+
+	if [[ -z $name ]]; then
+		name=${branch/#[a-zA-Z0-9]*\//}
+		if [[ ${#name} > $name_length ]]; then
+			name=${name:0:$name_length}
+		fi
+	fi
 
 	if [[ ! -z $branch ]]; then
 		repo="$repo@$branch"
 	fi
 	if [[ ! -z $name ]]; then
-		args=("${args[@]}" "--name" "${name//[^a-z0-9-]/-}")
+		args=("${args[@]}" "--name" "${name//[^a-zA-Z0-9-]/-}")
 	fi
 
-	echo spin up --config shopify.env.SHOP_1_BETA_FLAGS="${DEFAULT_SPIN_BETA_FLAGS}" $repo --wait "${args[@]}" "${raw_args[@]}"
-	spin up --config shopify.env.SHOP_1_BETA_FLAGS="${DEFAULT_SPIN_BETA_FLAGS}" $repo --wait "${args[@]}" "${raw_args[@]}"
+	echo spin up --config shopify.env.SHOP_1_BETA_FLAGS="$flags" $repo --wait "${args[@]}" "${raw_args[@]}"
+	spin up --config shopify.env.SHOP_1_BETA_FLAGS="$flags" $repo --wait "${args[@]}" "${raw_args[@]}"
 }
 
 alias suposw='sup --repo=online-store-web'
-alias supweb='sup --repo=web:minimal'
+alias supweb='sup --repo=web'
 alias supmedia='sup --repo=shopify:media'
 {{ else -}}
 if [[ $TERM_PROGRAM == vscode ]]; then
