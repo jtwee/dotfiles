@@ -87,6 +87,8 @@ alias 'gacn!'='git add . && git commit --no-edit --amend'
 alias 'gacnp!'='git add . && git commit --no-edit --amend && git push --force-with-lease --force-if-includes'
 alias gdtcb='git diff-tree --no-commit-id --name-only -r $(git_current_branch)'
 alias gacmsg='git add . && git commit -m'
+alias grbur='git rebase --update-refs'
+alias grbiur='git rebase --interactive --update-refs'
 
 function gco- {
 	if [[ $# == 1 ]]; then
