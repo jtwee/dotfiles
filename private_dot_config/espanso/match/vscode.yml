@@ -1,0 +1,32 @@
+# espanso match file
+
+# For a complete introduction, visit the official docs at: https://espanso.org/docs/
+
+matches:
+
+  - trigger: ";clog"
+    replace: "console.log($|$);"
+
+  - trigger: ";cloc"
+    replace: "console.log({{clipboard}}$|$);"
+    vars:
+      - name: "clipboard"
+        type: "clipboard"
+
+  - trigger: ";cwarn"
+    replace: "console.warn($|$);"
+
+  - trigger: ";cwarc"
+    replace: "console.warn({{clipboard}}$|$);"
+    vars:
+      - name: "clipboard"
+        type: "clipboard"
+
+  - trigger: ";cerr"
+    replace: "console.error($|$);"
+
+  - trigger: ";cerc"
+    replace: "console.error({{clipboard}}$|$);"
+    vars:
+      - name: "clipboard"
+        type: "clipboard"

@@ -46,6 +46,9 @@ matches:
   - trigger: ";pem"
     replace: "jeremy@breams.net"
 
+  - trigger: ";tem"
+    replace: "jeremy@tweddle.net"
+
   - trigger: ";fn"
     replace: "Jeremy"
 
@@ -57,3 +60,26 @@ matches:
 
   - trigger: ";ph"
     replace: "4379953595"
+
+  - trigger: ";pc"
+    replace: "L1S7R9"
+
+  - trigger: ;ghnote
+    replace: |
+      > [!NOTE]
+      > $|$
+
+  - trigger: ;ghwarn
+    replace: |
+      > [!WARNING]
+      > $|$
+
+  - trigger: ;ghcaut
+    replace: |
+      > [!CAUTION]
+      > $|$
+
+  - trigger: ;ghimp
+    replace: |
+      > [!IMPORTANT]
+      > $|$
