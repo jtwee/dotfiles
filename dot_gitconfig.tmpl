@@ -57,11 +57,11 @@
 	pnb = push-new-branch
 	fixup = !GIT_SEQUENCE_EDITOR=true git rebase -i --autosquash
 	last = "!f() { seq 1 $1 | xargs -I{} git name-rev --name-only --exclude=refs/tags/* \"@{-{}}\"; }; f"
-	{{ if eq .chezmoi.os "darwin" -}}
+{{- if eq .chezmoi.os "darwin" }}
 	create-new-pr = "!f() { local MAIN_BRANCH=${1-main}; local CURRENT=$(git current); local TITLE=$(echo $CURRENT | gsed -E -e 's/^([^\\/]+\\/|WSB-[0-9]+)(.*)$/\\1: \\2/' -e 's/\\/:/:/' -e 's/-/ /g' -e 's/(WSB) ([0-9]+)/\\1-\\2/' -e 's/[a-z]*/\\u&/g') && (git log --oneline --no-decorate $CURRENT...$MAIN_BRANCH | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B $MAIN_BRANCH -t \"$TITLE\" --web; }; f"
 	cnpr = create-new-pr
 	create-deploy-pr = ![ $(git current) = main ] || git checkout main && [ $(git rev-list --count ...origin/main) -eq 0 ] || git pull --ff-only && (git log --oneline --no-decorate main...prod | sed -E 's/^[a-z0-9]+ /- /' | tac | pbcopy) && gh pr create -B prod -t \"Deploy: Prod $(date +%Y-%m-%d)\" --web
-{{ end -}}
+{{- end }}
 
 [apply]
 
@@ -118,12 +118,12 @@
 
 [diff]
 
-# Detect copies as well as renames
+	# Detect copies as well as renames
 	renames = copies
-
-{{ if eq .chezmoi.os "darwin" -}}
+	algorithm = histogram
+{{- if eq .chezmoi.os "darwin" }}
 	tool = bcomp
-{{ end -}}
+{{- end }}
 
 [help]
 
@@ -134,10 +134,10 @@
 
 	# Include summaries of merged commits in newly created merge commit messages
 	log = true
-
-{{ if eq .chezmoi.os "darwin" -}}
+	conflictstyle = zdiff3
+{{- if eq .chezmoi.os "darwin" }}
 	tool = bcomp
-{{ end -}}
+{{- end }}
 
 [difftool]
 	prompt = false
@@ -157,6 +157,7 @@
 	default = simple
 	# Make `git push` push relevant annotated tags when pushing branches out.
 	followTags = true
+	autoSetupRemote = true
 
 # URL shorthands
 
@@ -190,9 +191,27 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+
 [commit]
 	template = {{ .chezmoi.homeDir }}/.stCommitMsg
+
 [pull]
 	ff = only
+
 [include]
 	path = {{ .chezmoi.homeDir }}/.config/dev/gitconfig
+
+
+[column]
+	ui = auto
+
+[tag]
+	sort = version:refname
+
+[init]
+	defaultBranch = main
+
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
