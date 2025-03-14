@@ -4,7 +4,6 @@
 const CHROME_PWAS = {
 	meet: "kjgfgldnnfoeklkmfkjfagphfepbbdan",
 	gmail: "fmgjjmmmlfnkbppncabfkddbjimcfncm",
-	workplace: "jmhnjadodelkehjlnlddaldfcipngnib",
 };
 
 const openChromePWA = (app = "", url = "", name = "Google Chrome") => {
@@ -38,11 +37,6 @@ module.exports = {
 		{
 			match: ({ url }) => url.host === "mail.google.com",
 			browser: ({ urlString }) => openChromePWA("gmail", urlString),
-		},
-		{
-			match: finicky.matchHostnames(["shopify.workplace.com"]),
-			browser: ({ urlString }) =>
-				openChromePWA("workplace", urlString, "Workplace"),
 		},
 	],
 };

@@ -1,124 +1,125 @@
 # Shopify-specific aliases
 alias dcd='dev cd'
-alias osui='dev cd online-store-ui'
-alias osw='dev cd online-store-web'
-alias sfr='dev cd storefront-renderer'
+# alias osui='dev cd online-store-ui'
+# alias osw='dev cd online-store-web'
+# alias sfr='dev cd storefront-renderer'
 alias shp='dev cd shopify'
+alias core='dev cd shopify'
 alias web='dev cd admin-web'
-alias drup='dev reup'
-alias dref='dev reup && dev restart --all'
+alias drup='dev down && dev up'
+alias dref='dev down && dev up && dev restart --all'
 
 if [ "$SPIN" ]; then
-	dev config set suppress-info.notifications.up true
+  dev config set suppress-info.notifications.up true
 fi
 
 {{ if eq .chezmoi.os "darwin" -}}
 function current_repo {
-	local repo=$(git rev-parse --show-toplevel 2>/dev/null)
-	if [[ $? -ne 0 ]]; then
-		return 1
-	fi
-	echo $(basename $repo)
+  local repo=$(git rev-parse --show-toplevel 2>/dev/null)
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+  echo $(basename $repo)
 }
 
 beta_flags_path="$HOME/.DEFAULT_SPIN_BETA_FLAGS"
 
 if [[ -s $beta_flags_path && -r $beta_flags_path ]]; then
-	source $beta_flags_path
+  source $beta_flags_path
 else
-	export DEFAULT_SPIN_BETA_FLAGS=""
+  export DEFAULT_SPIN_BETA_FLAGS=""
 fi
 
 function sup {
-	local repo=""
-	local branch=""
-	local name=""
-	local flags=""
-	local input="$@"
-	local args=()
-	local raw_args=()
-	local name_length=48
+  local repo=""
+  local branch=""
+  local name=""
+  local flags=""
+  local input="$@"
+  local args=()
+  local raw_args=()
+  local name_length=48
 
-	while (($#)); do
-		local params=$#
-		case "$1" in
-		-b=* | --branch=*)
-			if [[ -z $branch ]]; then
-				branch=${1/--branch=/-b=}
-				branch=${branch/#-b=/}
-				shift
-			fi
-			;;
-		-n=* | --name=*)
-			if [[ -z $name ]]; then
-				name=${1/--name=/-n=}
-				name=${name/#-n=/}
-				shift
-			fi
-			;;
-		-r=* | --repo=*)
-			if [[ -z $repo ]]; then
-				repo=${1/--repo=/-r=}
-				repo=${repo/#-r=/}
-				shift
-			fi
-			;;
-		-f=* | --flags=*)
-			if [[ -z $flags ]]; then
-				flags=${1/--flags=/-f=}
-				flags=${flags/#-f=/}
-				shift
-			fi
-			;;
-		--)
-			shift
-			raw_args=("$@")
-			while (($#)); do
-				shift
-			done
-			;;
-		*)
-			if [[ -z $name && ! $1 = -* ]]; then
-				name=${1/--name=/-n=}
-				name=${name/#-n=/}
-				shift
-			fi
-			;;
-		esac
+  while (($#)); do
+    local params=$#
+    case "$1" in
+    -b=* | --branch=*)
+      if [[ -z $branch ]]; then
+        branch=${1/--branch=/-b=}
+        branch=${branch/#-b=/}
+        shift
+      fi
+      ;;
+    -n=* | --name=*)
+      if [[ -z $name ]]; then
+        name=${1/--name=/-n=}
+        name=${name/#-n=/}
+        shift
+      fi
+      ;;
+    -r=* | --repo=*)
+      if [[ -z $repo ]]; then
+        repo=${1/--repo=/-r=}
+        repo=${repo/#-r=/}
+        shift
+      fi
+      ;;
+    -f=* | --flags=*)
+      if [[ -z $flags ]]; then
+        flags=${1/--flags=/-f=}
+        flags=${flags/#-f=/}
+        shift
+      fi
+      ;;
+    --)
+      shift
+      raw_args=("$@")
+      while (($#)); do
+        shift
+      done
+      ;;
+    *)
+      if [[ -z $name && ! $1 = -* ]]; then
+        name=${1/--name=/-n=}
+        name=${name/#-n=/}
+        shift
+      fi
+      ;;
+    esac
 
-		if [[ $# == $params ]]; then
-			echo "Incorrect arguments provided ($# leftover): \"$@\""
-			return 1
-		fi
-	done
+    if [[ $# == $params ]]; then
+      echo "Incorrect arguments provided ($# leftover): \"$@\""
+      return 1
+    fi
+  done
 
-	[[ -z $repo ]] && repo=$(current_repo)
+  [[ -z $repo ]] && repo=$(current_repo)
 
-	if [[ -z $repo ]]; then
-		echo "Missing required argument: --repo"
-		return 1
-	fi
+  if [[ -z $repo ]]; then
+    echo "Missing required argument: --repo"
+    return 1
+  fi
 
-	if [[ -z $flags ]]; then
-		flags=$DEFAULT_SPIN_BETA_FLAGS
-	fi
+  if [[ -z $flags ]]; then
+    flags=$DEFAULT_SPIN_BETA_FLAGS
+  fi
 
-	if [[ -z $name ]]; then
-		name=${branch/#[a-zA-Z0-9]*\//}
-		if [[ ${#name} > $name_length ]]; then
-			name=${name:0:$name_length}
-		fi
-	fi
+  if [[ -z $name ]]; then
+    name=${branch/#[a-zA-Z0-9]*\//}
+    if [[ ${#name} > $name_length ]]; then
+      name=${name:0:$name_length}
+    fi
+  fi
 
-	if [[ ! -z $branch ]]; then
-		repo="$repo@$branch"
-	fi
-	if [[ ! -z $name ]]; then
-		args=("${args[@]}" "--name" "${name//[^a-zA-Z0-9-]/-}")
-	fi
+  if [[ ! -z $branch ]]; then
+    repo="$repo@$branch"
+  fi
+  if [[ ! -z $name ]]; then
+    args=("${args[@]}" "--name" "${name//[^a-zA-Z0-9-]/-}")
+  fi
 
-	echo spin up --config shopify.env.SHOP_1_BETA_FLAGS="$flags" $repo --wait "${args[@]}" "${raw_args[@]}"
-	spin up --config shopify.env.SHOP_1_BETA_FLAGS="$flags" $repo --wait "${args[@]}" "${raw_args[@]}"
+  echo spin up --config shopify.env.SHOP_1_BETA_FLAGS="$flags" $repo --wait "${args[@]}" "${raw_args[@]}"
+  spin up --config shopify.env.SHOP_1_BETA_FLAGS="$flags" $repo --wait "${args[@]}" "${raw_args[@]}"
 }
 
 alias suposw='sup --repo=online-store-web'
@@ -126,8 +127,8 @@ alias supweb='sup --repo=web'
 alias supmedia='sup --repo=shopify:media'
 {{ else -}}
 if [[ $TERM_PROGRAM == vscode ]]; then
-	export GIT_EDITOR="code -w"
+  export GIT_EDITOR="code -w"
 else
-	export GIT_EDITOR="vim"
+  export GIT_EDITOR="vim"
 fi
 {{ end -}}

@@ -79,7 +79,7 @@ matches:
       > [!CAUTION]
       > $|$
 
-  - trigger: ;ghimp
+  - triggers: [;ghimp,;ghinfo]
     replace: |
       > [!IMPORTANT]
       > $|$

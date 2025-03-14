@@ -186,12 +186,6 @@
 	name = Jeremy Tweddle
 	email = {{ .email | quote }}
 
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-
 [commit]
 	template = {{ .chezmoi.homeDir }}/.stCommitMsg
 
@@ -215,3 +209,13 @@
 	prune = true
 	pruneTags = true
 	all = true
+{{- $hostname := output "hostname" "-s" | trim -}}
+{{- if eq $hostname "Jeremys-Work-MacBook" }}
+[maintenance]
+	repo = /Users/jeremytweddle/world/trees/root/src
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+{{- end }}

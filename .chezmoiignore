@@ -1,10 +1,11 @@
 {{- if eq .chezmoi.os "darwin" -}}
 install.sh
-    {{- $computerName := output "scutil" "--get" "ComputerName" | trim -}}
-    {{- if ne $computerName "Jeremy’s Work MacBook" }}
-    .config/espanso/match/work.yml
-    .finicky.js
-    {{- end }}
+  {{- $hostname := output "hostname" "-s" | trim -}}
+  {{- if ne $hostname "Jeremys-Work-MacBook" }}
+  .oh-my-zsh/custom/50-shopify.zsh
+  .config/espanso/match/work.yml
+  .finicky.js
+  {{- end }}
 {{- else -}}
 .Brewfile
 .config/karabiner
