@@ -39,8 +39,8 @@ source $ZSH/oh-my-zsh.sh
 [[ -f /opt/dev/dev.sh ]] && source /opt/dev/dev.sh
 
 [[ -x /usr/local/bin/spin ]] && source <(spin completion --shell=zsh)
-
-[[ "$(pwd)" =~ areas/clients/admin-web && -x $(which pnpm) && ! -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && pnpm install-completion zsh
 {{- end }}
+
+[[ "$(pwd)" =~ areas/clients/admin-web && -x $(which pnpm) && $(pnpm -v) =~ "^8." && ! -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && pnpm install-completion zsh
 
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
