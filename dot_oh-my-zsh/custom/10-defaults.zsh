@@ -3,10 +3,18 @@ DISABLE_AUTO_TITLE="true"
 setopt hist_expire_dups_first
 setopt hist_ignore_all_dups
 
+if [[ $(which cursor) ]]; then
+  export DEFAULT_EDITOR='cursor'
+elif [[ $(which code) ]]; then
+  export DEFAULT_EDITOR='code'
+else
+  export DEFAULT_EDITOR='vim'
+fi
+
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='code -w'
+  export EDITOR="$DEFAULT_EDITOR -w"
 fi
 
 export LANG="en_US.UTF-8"

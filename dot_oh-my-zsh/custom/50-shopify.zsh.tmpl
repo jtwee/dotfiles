@@ -127,7 +127,7 @@ alias supweb='sup --repo=web'
 alias supmedia='sup --repo=shopify:media'
 {{ else -}}
 if [[ $TERM_PROGRAM == vscode ]]; then
-  export GIT_EDITOR="code -w"
+  export GIT_EDITOR="cursor -w"
 else
   export GIT_EDITOR="vim"
 fi

@@ -106,11 +106,11 @@ function gco- {
 #######################################
 
 # Extra names and functions
-alias edit="code -a"
+alias edit="$DEFAULT_EDITOR -a"
 
 # Common shortcuts
-alias edithosts="code -a /etc/hosts"
-alias editprof="code -a ~/.zshrc"
+alias edithosts="$DEFAULT_EDITOR -a /etc/hosts"
+alias editprof="$DEFAULT_EDITOR -a ~/.zshrc"
 
 # Find aliases
 alias fdotdash="find . -name '._*'"
@@ -293,59 +293,6 @@ function digany {
   dig +nocmd -q "$1" -t ANY +multiline +noall +answer
 }
 
-# Normalize `open` across Linux, macOS, and Windows.
-# This is needed to make the `o` function (see below) cross-platform.
-if [ ! $(uname -s) = 'Darwin' ]; then
-  if grep -q Microsoft /proc/version; then
-    # Ubuntu on Windows using the Linux subsystem
-    alias open='explorer.exe'
-  else
-    alias open='xdg-open'
-  fi
-fi
-
-function openWith {
-  if [[ $# > 0 ]]; then
-    case "$1" in
-    c)
-      opener='code'
-      shift
-      ;;
-    v)
-      opener='vim'
-      shift
-      ;;
-    o)
-      opener='open'
-      shift
-      ;;
-    esac
-  fi
-
-  opener="${opener:-open}"
-
-  if [[ $# == 0 ]]; then
-    $opener .
-  else
-    $opener "$@"
-  fi
-}
-
-# `c` with no arguments opens the current directory in vscode, otherwise opens the given location
-function c {
-  openWith $0 "$@"
-}
-
-# `v` with no arguments opens the current directory in Vim, otherwise opens the given location
-function v {
-  openWith $0 "$@"
-}
-
-# `o` with no arguments opens the current directory, otherwise opens the given location
-function o {
-  openWith $0 "$@"
-}
-
 # `treee` is a shorthand for `tree` with hidden files and color enabled, ignoring
 # the `.git` directory, listing directories first. The output gets piped into
 # `less` with options to preserve color and line numbers, unless the output is
@@ -387,12 +334,55 @@ function set-screenshot-location {
   defaults write com.apple.screencapture location "$1"
   killall SystemUIServer
 }
-{{ else -}}
+
+# Normalize `open` across Linux, macOS, and Windows.
+# This is needed to make the `o` function (see below) cross-platform.
+if [ ! $(uname -s) = 'Darwin' ]; then
+  if grep -q Microsoft /proc/version; then
+    # Ubuntu on Windows using the Linux subsystem
+    alias open='explorer.exe'
+  else
+    alias open='xdg-open'
+  fi
+fi
+
 function openWith {
   if [[ $# > 0 ]]; then
     case "$1" in
     c)
-      opener='code'
+      opener=$DEFAULT_EDITOR
+      shift
+      ;;
+    v)
+      opener='vim'
+      shift
+      ;;
+    o)
+      opener='open'
+      shift
+      ;;
+    esac
+  fi
+
+  opener="${opener:-open}"
+
+  if [[ $# == 0 ]]; then
+    $opener .
+  else
+    $opener "$@"
+  fi
+}
+
+# `o` with no arguments opens the current directory, otherwise opens the given location
+function o {
+  openWith $0 "$@"
+}
+{{- else -}}
+function openWith {
+  if [[ $# > 0 ]]; then
+    case "$1" in
+    c)
+      opener=$DEFAULT_EDITOR
       shift
       ;;
     v)
@@ -402,14 +392,13 @@ function openWith {
     esac
   fi
 
-  opener="${opener:-code}"
-
   if [[ $# == 0 ]]; then
     $opener .
   else
     $opener "$@"
   fi
 }
+{{- end }}
 
 # `c` with no arguments opens the current directory in vscode, otherwise opens the given location
 function c {
@@ -420,4 +409,3 @@ function c {
 function v {
   openWith $0 "$@"
 }
-{{ end -}}
