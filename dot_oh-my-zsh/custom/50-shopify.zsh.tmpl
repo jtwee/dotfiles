@@ -1,8 +1,5 @@
 # Shopify-specific aliases
 alias dcd='dev cd'
-# alias osui='dev cd online-store-ui'
-# alias osw='dev cd online-store-web'
-# alias sfr='dev cd storefront-renderer'
 alias shp='dev cd shopify'
 alias core='dev cd shopify'
 alias web='dev cd admin-web'
@@ -132,3 +129,22 @@ else
   export GIT_EDITOR="vim"
 fi
 {{ end -}}
+
+#compdef gt
+###-begin-gt-completions-###
+#
+# yargs command completion script
+#
+# Installation: gt completion >> ~/.zshrc
+#    or gt completion >> ~/.zprofile on OSX.
+#
+_gt_yargs_completions() {
+  local reply
+  local si=$IFS
+  IFS=$'
+' reply=($(COMP_CWORD="$((CURRENT - 1))" COMP_LINE="$BUFFER" COMP_POINT="$CURSOR" gt --get-yargs-completions "${words[@]}"))
+  IFS=$si
+  _describe 'values' reply
+}
+compdef _gt_yargs_completions gt
+###-end-gt-completions-###
