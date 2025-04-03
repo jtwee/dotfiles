@@ -34,3 +34,8 @@ bindkey '\e' _esc_to_clear_things
 
 ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste menu-complete expand-or-complete)
 ZSH_AUTOSUGGEST_HISTORY_IGNORE="cd *"
+
+zstyle ':omz:plugins:alias-finder' autoload yes
+zstyle ':omz:plugins:alias-finder' longer no
+zstyle ':omz:plugins:alias-finder' exact yes
+zstyle ':omz:plugins:alias-finder' cheaper yes
