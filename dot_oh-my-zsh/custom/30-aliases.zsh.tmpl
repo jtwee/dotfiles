@@ -181,11 +181,30 @@ function bak {
   done
 }
 
+function bakmv {
+  while (($#)); do
+    if [[ -r $1 && -w $(dirname $1) ]]; then
+      if [[ -d $1 ]]; then
+        mv -f "$1" "$1.bak"
+      else
+        mv -i "$1" "$1.bak"
+      fi
+    fi
+    shift
+  done
+}
+
 # Unbackup a file or folder
 function unbak {
   while (($#)); do
     if [[ -d "$1.bak" || -f "$1.bak" ]]; then
-      mv -f "$1.bak" "$1"
+      echo "unbak $1.bak to $1"
+      mv -i "$1.bak" "$1"
+    elif [[ -r "$1" && "$1" =~ .bak$ ]]; then
+      echo "unbak $1 to ${1%.bak}"
+      mv -i "$1" "${1%.bak}"
+    else
+      echo "No backup found for $1"
     fi
     shift
   done
