@@ -1,11 +1,7 @@
 [data]
-{{- if eq .chezmoi.os "darwin" -}}
-  {{- $computerName := output "scutil" "--get" "ComputerName" | trim -}}
-  {{- if eq $computerName "Jeremy’s Work MacBook" }}
-  email = "jeremy.tweddle@shopify.com"
-  {{- else }}
-  email = "jeremy@breams.net"
-  {{- end }}
+{{- $computerName := output "scutil" "--get" "ComputerName" | trim -}}
+{{- if eq $computerName "Jeremy’s Work MacBook" }}
+email = "jeremy.tweddle@crowdstrike.com"
 {{- else }}
-  email = "jeremy.tweddle@shopify.com"
+email = "jeremy@breams.net"
 {{- end }}

@@ -41,7 +41,7 @@ matches:
           format: "%H%M%S"
 
   - trigger: ";wem"
-    replace: "jeremy.tweddle@shopify.com"
+    replace: "jeremy.tweddle@crowdstrike.com"
 
   - trigger: ";pem"
     replace: "jeremy@breams.net"

@@ -2,7 +2,7 @@
 install.sh
   {{- $hostname := output "hostname" "-s" | trim -}}
   {{- if ne $hostname "Jeremys-Work-MacBook" }}
-  .oh-my-zsh/custom/50-shopify.zsh
+  .oh-my-zsh/custom/50-work.zsh
   .config/espanso/match/work.yml
   .finicky.js
   {{- end }}

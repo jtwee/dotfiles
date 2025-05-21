@@ -1,0 +1,15 @@
+{{ if eq .chezmoi.os "darwin" -}}
+function current_repo {
+  local repo=$(git rev-parse --show-toplevel 2>/dev/null)
+  if [[ $? -ne 0 ]]; then
+    return 1
+  fi
+  echo $(basename $repo)
+}
+{{ else -}}
+if [[ $TERM_PROGRAM == vscode ]]; then
+  export GIT_EDITOR="code -w"
+else
+  export GIT_EDITOR="vim"
+fi
+{{ end -}}
